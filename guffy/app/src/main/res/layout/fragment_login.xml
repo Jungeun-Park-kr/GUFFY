@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.LoginFragment">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/logo"
         android:layout_width="250dp"
         android:layout_height="200dp"
-        android:layout_marginTop="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/logo_white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -153,10 +152,11 @@
         android:background="#00ff0000"
         android:text="개발자 칭찬하기"
         android:textSize="15sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
     </androidx.appcompat.widget.AppCompatButton>
 
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
