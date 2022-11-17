@@ -17,6 +17,10 @@
             android:name=".SplashActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.login.SplashActivity"
+            android:exported="false"
+            android:label="@string/title_activity_splash" />
+        <activity
             android:name=".ChattingActivity"
             android:exported="false" />
         <activity
@@ -24,6 +28,18 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.SplashActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChattingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
