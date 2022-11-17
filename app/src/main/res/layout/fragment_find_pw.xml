@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.FindPwFragment">
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/findpw_logo"
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logo_white"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.google.android.material.imageview.ShapeableImageView>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/findpw_appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="GUFFY"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findpw_logo">
+
+    </com.google.android.material.textview.MaterialTextView>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/findpw_findpw_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="비밀번호 찾기"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findpw_appName">
+
+    </com.google.android.material.textview.MaterialTextView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/findpw_email_tvlayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:hint="가입한 이메일"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findpw_findpw_tv">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/findpw_email_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/findpw_tempPwSendBtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="임시 비밀번호 발송"
+        app:layout_constraintTop_toBottomOf="@id/findpw_email_tvlayout"
+        android:layout_margin="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

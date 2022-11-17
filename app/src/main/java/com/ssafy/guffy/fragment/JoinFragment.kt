@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources.getColorStateList
 import androidx.fragment.app.Fragment
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.ssafy.guffy.R
 import com.ssafy.guffy.databinding.FragmentJoinBinding
 
@@ -38,7 +36,7 @@ class JoinFragment : Fragment() {
         // spinner 연결
         var adapter = ArrayAdapter.createFromResource(
             requireContext(),
-            com.ssafy.guffy.R.array.gender_list,
+            R.array.gender_list,
             android.R.layout.simple_spinner_dropdown_item
         );
         binding.genderSpinner.setAdapter(adapter)
@@ -58,13 +56,10 @@ class JoinFragment : Fragment() {
 //        setOnCheckedStateChangeListener()
 
 //        setSelectionRequired(boolean selectionRequired)
-//        모든 하위 칩이 선택 취소되지 않도록 할지 여부를 설정합니다.
+          // 모든 하위 칩이 선택 취소되지 않도록 할지 여부를 설정합니다.
 
-        var interestChipGroup = binding.joinInterstChipGroup
-
-
-        var interstList = listOf<String>(
-            "안드로이드", "iOS", "백엔드", "프론트엔드", "JAVA", "C", "JS", "Kotlin", "CSS", "HTML", "기획", "풀스택", "DB",
+        var interstList = listOf(
+            "안드로이드", "iOS", "백엔드", "프론트엔드", "JAVA", "C", "JS", "Kotlin", "기획", "풀스택", "DB",
 
             "K-POP", "J-POP", "POP", "힙합", "재즈","클래식","EDM", "발라드","포크", "디스코", "트로트",
 
@@ -77,13 +72,44 @@ class JoinFragment : Fragment() {
             "수제 맥주", "와인", "마블시리즈", "피크닉", "넷플릭스", "국내여행", "해외여행"
             )
 
-        for (i  in 0 .. interstList.size){
+        var clickedInterestChipCnt = 0
+        var clickedInterestChipList = mutableListOf<String>()
+        for (i in interstList.indices){
             // Chip 인스턴스 생성
             var chip = Chip(requireContext())
+            // 칩 고유 아이디 생성
+            chip.id = i
             // Chip 의 텍스트 지정
             chip.text = interstList.get(i)
             // chip group 에 해당 chip 추가
-            binding.joinInterstChipGroup.addView(chip);
+            binding.joinInterstChipGroup.addView(chip)
+
+            chip.setOnClickListener {
+                if (clickedInterestChipCnt < 5 && !chip.isCheckable){
+                    chip.setChipBackgroundColorResource(R.color.orange)
+                    clickedInterestChipCnt++
+                    clickedInterestChipList.add(interstList.get(chip.id))
+                }else{
+                    chip.setChipBackgroundColorResource(R.color.grey)
+                    clickedInterestChipCnt--
+                }
+            }
+        }
+
+        binding.joinNextBtn.setOnClickListener {
+            if (binding.joinMbtiFilterChipGroup.checkedChipId == -1){ // mbti 하나도 선택 안 한 경우
+                Toast.makeText(requireContext(), "mbti를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }else if (clickedInterestChipCnt <= 2){ // 관심사 0 ~ 2개 선택한 경우
+                Toast.makeText(requireContext(), "관심사를 3개 이상 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else{ // 다음 버튼 누르면 로그인 화면으로 전환
+                Toast.makeText(requireContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                requireActivity()
+                    .supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.login_frame_container, LoginFragment())
+                    .commit()
+            }
         }
     }
 

@@ -7,7 +7,7 @@
     tools:context=".activity.LoginActivity">
 
     <FrameLayout
-        android:id="@+id/frame_container"
+        android:id="@+id/login_frame_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>

@@ -1,13 +1,10 @@
 package com.ssafy.guffy.activity
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ssafy.guffy.R
 import com.ssafy.guffy.databinding.ActivityLoginBinding
-import com.ssafy.guffy.fragment.JoinFragment
 import com.ssafy.guffy.fragment.LoginFragment
 
 private lateinit var binding : ActivityLoginBinding
@@ -21,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.frame_container, LoginFragment())
+            .replace(R.id.login_frame_container, LoginFragment())
             .commit()
     }
 }
