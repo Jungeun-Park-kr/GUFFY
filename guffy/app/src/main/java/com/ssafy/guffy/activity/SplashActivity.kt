@@ -1,12 +1,23 @@
 package com.ssafy.guffy.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ssafy.guffy.R
+import com.ssafy.guffy.databinding.ActivitySplashBinding
 
+private lateinit var binding : ActivitySplashBinding
 class SplashActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.logo.setOnClickListener{
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
+
     }
 }

@@ -31,12 +31,15 @@ android {
         jvmTarget = '1.8'
     }
 
-    buildFeatures {
-        compose = true
-    }
+//    buildFeatures {
+//        compose = true
+//    }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0-alpha08"
+//    composeOptions {
+//        kotlinCompilerExtensionVersion = "1.2.0-alpha08"
+//    }
+    viewBinding{
+        enabled = true
     }
     
 }
@@ -51,6 +54,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
-    implementation("androidx.compose.material3:material3:1.1.0-alpha01")
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha01")
+    implementation 'com.google.android.material:material:1.7.0'
+
 }
