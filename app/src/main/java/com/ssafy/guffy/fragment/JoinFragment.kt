@@ -33,6 +33,9 @@ class JoinFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         // spinner 연결
         var adapter = ArrayAdapter.createFromResource(
             requireContext(),
@@ -72,11 +75,11 @@ class JoinFragment : Fragment() {
             "수제 맥주", "와인", "마블시리즈", "피크닉", "넷플릭스", "국내여행", "해외여행"
         )
 
-        var clickedInterestChipCnt = 0
         var clickedInterestChipList = mutableListOf<String>()
         for (i in interstList.indices){
             // Chip 인스턴스 생성
             var chip = Chip(requireContext())
+            chip.isCheckable = false
             // 칩 고유 아이디 생성
             chip.id = i
             // Chip 의 텍스트 지정
@@ -85,13 +88,17 @@ class JoinFragment : Fragment() {
             binding.joinInterstChipGroup.addView(chip)
 
             chip.setOnClickListener {
-                if (clickedInterestChipCnt < 5 && !chip.isCheckable){
+
+                if (clickedInterestChipList.size < 5){
+                    clickedInterestChipList.add(interstList[chip.id])
                     chip.setChipBackgroundColorResource(R.color.orange)
-                    clickedInterestChipCnt++
-                    clickedInterestChipList.add(interstList.get(chip.id))
-                }else{
+                }
+                // 이미 체크한걸 체크하는 경우
+                else if (clickedInterestChipList.contains(interstList[chip.id])){
+                    clickedInterestChipList.remove(interstList[chip.id])
                     chip.setChipBackgroundColorResource(R.color.grey)
-                    clickedInterestChipCnt--
+                }else{
+                    Toast.makeText(requireContext(), "5개 이상은 선택할 수 없어요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -99,7 +106,7 @@ class JoinFragment : Fragment() {
         binding.joinNextBtn.setOnClickListener {
             if (binding.joinMbtiFilterChipGroup.checkedChipId == -1){ // mbti 하나도 선택 안 한 경우
                 Toast.makeText(requireContext(), "mbti를 선택해주세요.", Toast.LENGTH_SHORT).show()
-            }else if (clickedInterestChipCnt <= 2){ // 관심사 0 ~ 2개 선택한 경우
+            }else if (clickedInterestChipList.size <= 2){ // 관심사 0 ~ 2개 선택한 경우
                 Toast.makeText(requireContext(), "관심사를 3개 이상 선택해주세요.", Toast.LENGTH_SHORT).show()
             }
             else{ // 다음 버튼 누르면 로그인 화면으로 전환
