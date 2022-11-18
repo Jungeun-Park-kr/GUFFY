@@ -1,60 +1,55 @@
 package com.ssafy.guffy.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.guffy.R
+import com.ssafy.guffy.databinding.FragmentFindPwBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FindPwFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+private const val TAG = "FindPwFragment 구피"
+private lateinit var binding : FragmentFindPwBinding
 class FindPwFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_find_pw, container, false)
+        binding = FragmentFindPwBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FindPwFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FindPwFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.findpwTempPwSendBtn.setOnClickListener {
+            showDialog()
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.login_frame_container, LoginFragment())
+                .commit()
+        }
+
+    }
+
+    // 다이어로그 생성 함수
+    fun showDialog(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder
+            .setTitle("비밀번호 찾기")
+            .setMessage("회원가입한 이메일로 임시 비밀번호가 전송되었습니다.")
+            .setPositiveButton("OK"){dialog, which->
+                Log.d(TAG, "showDialog: 확인버튼 누름")
             }
+            .create()
+            .show()
+
     }
 }

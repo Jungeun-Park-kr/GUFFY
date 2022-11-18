@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gender_list">
+        <item>남자</item>
+        <item>여자</item>
+        <item>비공개</item>
+    </string-array>
+    <string-array name="mbti_list">
+        <item>ESTP</item>
+        <item>ESTJ</item>
+        <item>ESFP</item>
+        <item>ESFJ</item>
+        <item>ENTP</item>
+        <item>ENTJ</item>
+        <item>ENFP</item>
+        <item>ENFJ</item>
+        <item>ISTP</item>
+        <item>ISTJ</item>
+        <item>ISFP</item>
+        <item>ISFJ</item>
+        <item>INFP</item>
+        <item>INFJ</item>
+        <item>INTP</item>
+        <item>INTJ</item>
+        <item>모름</item>
+        <item>싫어함</item>
+        <item>비공개</item>
+    </string-array>
+</resources>
+

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.LoginFragment">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/logo"
         android:layout_width="250dp"
         android:layout_height="200dp"
-        android:layout_marginTop="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/logo_white"
+        android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +21,7 @@
 
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/appName"
+        android:id="@+id/login_appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -35,7 +35,7 @@
 
     <!--  아이디 editText -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/idTextInputLayout"
+        android:id="@+id/findpw_email_tvlayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -45,10 +45,10 @@
         android:hint="아이디"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appName">
+        app:layout_constraintTop_toBottomOf="@+id/login_appName">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_id"
+            android:id="@+id/findpw_email_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -56,7 +56,7 @@
 
     <!--  비밀번호 editText -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
+        android:id="@+id/login_pw_tvlayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -66,10 +66,10 @@
         android:hint="비밀번호"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idTextInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/findpw_email_tvlayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_pwd"
+            android:id="@+id/login_pw_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
@@ -77,44 +77,25 @@
 
     <!--  로그인 버튼  -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton"
-
+        android:id="@+id/login_loginbtn"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="40dp"
-        android:text='login'
+        android:text="login"
         app:cornerRadius="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
-
-    </com.google.android.material.button.MaterialButton>
-
-    <!--  로그인 버튼  -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/loginBtn"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="40dp"
-        android:text='login'
-        app:cornerRadius="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/login_pw_tvlayout">
 
     </com.google.android.material.button.MaterialButton>
 
     <!-- 회원가입   -->
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/findPwBtn"
+        android:id="@+id/login_findPwBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -122,16 +103,16 @@
         android:text="비밀번호 찾기"
         android:textSize="15sp"
         android:layout_marginRight="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/joinBtn"
+        app:layout_constraintEnd_toStartOf="@+id/login_joinBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton">
+        app:layout_constraintTop_toBottomOf="@+id/login_loginbtn">
 
     </androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/joinBtn"
+        android:id="@+id/login_joinBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -140,23 +121,24 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/findPwBtn"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton">
+        app:layout_constraintStart_toEndOf="@+id/login_findPwBtn"
+        app:layout_constraintTop_toBottomOf="@+id/login_loginbtn">
 
     </androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/developer"
+        android:id="@+id/login_developer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="#00ff0000"
         android:text="개발자 칭찬하기"
         android:textSize="15sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
     </androidx.appcompat.widget.AppCompatButton>
 
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
