@@ -346,7 +346,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="최소 3개, 최대 5개 선택할 수 있어요."
+                android:text="@string/join_mbti_info"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@+id/join_interst_tv"
                 app:layout_constraintStart_toEndOf="@+id/join_interst_tv">

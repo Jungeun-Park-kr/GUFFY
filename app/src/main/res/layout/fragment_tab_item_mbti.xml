@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".settingsfragment.TabItemMbtiFragment">
+
+
+    <TextView
+        android:id="@+id/settings_mbti_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_mbti_info"
+        app:layout_constraintBottom_toTopOf="@+id/settings_mbti_mbti_filterChipGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <!--  여기 칩 넣기  -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/settings_mbti_mbti_filterChipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:chipSpacing="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tab_item_mbti_save_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_mbti_info"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_isfp_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ISFP" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_isfj_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ISFJ" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_istp_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ISTP" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_istj_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ISTJ" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_intj_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INTJ" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_intp_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INTP" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_estp_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ESTP" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_estj_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ESTJ" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_entp_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ENTP" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_entj_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ENTJ" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_infp_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INFP" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_infj_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INFJ" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_esfp_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ESFP" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_esfj_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ESFJ" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_enfp_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ENFP" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_enfj_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ENFJ" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_idk_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="모름" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_hate_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="싫어함" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/settings_mbti_private_chip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비공개" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/tab_item_mbti_save_btn"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:text='변경 사항 저장'
+        app:cornerRadius="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_mbti_mbti_filterChipGroup" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
