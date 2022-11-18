@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/contact_list_item_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:maxLines="1"
+        android:text="아장아장 걷는 비욘세"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/contact_list_item_mbti_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/contact_list_item_name_tv"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/contact_list_item_name_tv"
+        android:text="ISTP" />
+
+    <ImageView
+        android:id="@+id/contact_list_item_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_new_releases_24" />
+
+    <TextView
+        android:id="@+id/contact_list_item_interest_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_list_item_name_tv"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:maxLines="1"
+        android:text="#android #고양이 #산책" />
+
+    <TextView
+        android:id="@+id/contact_list_item_inform_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="새로운 친구가 등록되었습니다. 대화를 나눠보아요"
+        android:visibility="gone"
+        android:layout_below="@id/contact_list_item_name_tv"
+        android:layout_gravity="center_vertical" />
+
+
+
+
+
+
+
+
+</RelativeLayout>
