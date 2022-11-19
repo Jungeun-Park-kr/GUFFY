@@ -14,6 +14,9 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 액션바 숨기기
+        supportActionBar?.hide()
+
         binding.logo.setOnClickListener{
             startActivity(Intent(this, LoginActivity::class.java))
         }

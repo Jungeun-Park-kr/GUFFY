@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.guffy.R
+import com.ssafy.guffy.activity.ChattingActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.databinding.FragmentLoginBinding
 
@@ -48,7 +49,8 @@ class LoginFragment : Fragment() {
 
         binding.loginLoginbtn.setOnClickListener {
             // 메인으로 가는
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
+//            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            startActivity(Intent(requireActivity(), ChattingActivity::class.java))
         }
 
     }
