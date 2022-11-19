@@ -7,16 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.guffy.R
-import com.ssafy.guffy.activity.ChattingActivity
+import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.databinding.FragmentLoginBinding
 
 private lateinit var binding : FragmentLoginBinding
 class LoginFragment : Fragment() {
 
+    private lateinit var loginActivity: LoginActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        loginActivity = context as LoginActivity
     }
 
 
@@ -36,6 +37,7 @@ class LoginFragment : Fragment() {
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.login_frame_container, JoinFragment())
+                .addToBackStack(null)
                 .commit()
 
         }
@@ -44,13 +46,14 @@ class LoginFragment : Fragment() {
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.login_frame_container, FindPwFragment())
+                .addToBackStack(null)
                 .commit()
         }
 
         binding.loginLoginbtn.setOnClickListener {
             // 메인으로 가는
-//            startActivity(Intent(requireActivity(), MainActivity::class.java))
-            startActivity(Intent(requireActivity(), ChattingActivity::class.java))
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+            loginActivity.finish() // 로그인 액티비티 종료
         }
 
     }

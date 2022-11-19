@@ -15,8 +15,6 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 액션바 숨기기
-        supportActionBar?.hide()
 
         supportFragmentManager
             .beginTransaction()

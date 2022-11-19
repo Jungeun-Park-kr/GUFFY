@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ssafy.guffy.R
 import com.ssafy.guffy.databinding.ActivitySplashBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private lateinit var binding : ActivitySplashBinding
 class SplashActivity : AppCompatActivity() {
@@ -14,13 +17,15 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 액션바 숨기기
-        supportActionBar?.hide()
-
-        binding.logo.setOnClickListener{
-            startActivity(Intent(this, LoginActivity::class.java))
+        GlobalScope.launch {
+            openLoginActivity()
         }
 
+    }
 
+    private suspend fun openLoginActivity() {
+        delay(1000)
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }
