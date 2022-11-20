@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.guffy.model.model.ChatFriend;
+import com.ssafy.guffy.model.model.Friend;
 import com.ssafy.guffy.model.model.User;
 
 public interface UserMapper {
@@ -13,4 +15,6 @@ public interface UserMapper {
     int create(User user);
     int delete(String email);
     int isUsed(String email);
+    List<ChatFriend> friends(String email);
+    Friend friend(Integer friend_id);
 }

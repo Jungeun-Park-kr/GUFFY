@@ -49,5 +49,27 @@
         where email = #{email}
     </delete>
     
+    <select id="friends" parameterType="string" resultType="ChatFriend">
+    	select if
+		(	user1_id = (select id
+			from user
+			where email = #{email}
+			)
+		, user2_id, user1_id) as friend_id, c.id as chat_id
+		from user u join chatting_room c
+		on u.id in (c.user1_id, c.user2_id)
+		where u.email = #{email}
+    </select>
+    
+    <select id="friend" parameterType="Integer" resultType="Friend">
+		select
+		u.id as friend_id
+		, if(c.user1_id = #{friend_id}, "user1", "user2") as friend
+		, email, nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5
+		,c.id as chat_id, user1_last_visited_time, user2_last_visited_time, user1_last_chatting_time, user2_last_chatting_time
+		from user u join chatting_room c
+		on u.id in (c.user1_id, c.user2_id)
+		where u.id = #{friend_id};
+    </select>
     
 </mapper>

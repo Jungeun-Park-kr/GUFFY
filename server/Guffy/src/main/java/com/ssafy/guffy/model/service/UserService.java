@@ -2,6 +2,8 @@ package com.ssafy.guffy.model.service;
 
 import java.util.List;
 
+import com.ssafy.guffy.model.model.ChatFriend;
+import com.ssafy.guffy.model.model.Friend;
 import com.ssafy.guffy.model.model.User;
 
 public interface UserService {
@@ -45,4 +47,18 @@ public interface UserService {
      * @return 1: 사용중 , 0 : 사용 X
      */
     public int isUsed(String email);
+    
+    /**
+     * 나와 친구인 사람의 id, 그 사람과의 채팅방 id를 가져옴
+     * @param email
+     * @return
+     */
+    List<ChatFriend> friends(String email);
+    
+    /**
+     * friend_id인 친구 정보와 그 친구와의 채팅 정보를 가져온다.
+     * @param friend_id
+     * @return
+     */
+    Friend friend(Integer friend_id);
 }
