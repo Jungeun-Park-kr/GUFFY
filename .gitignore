@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,androidstudio,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,androidstudio,windows
 
+### Spring Boot ###
+application.properties
+
 ### macOS ###
 # General
 .DS_Store
