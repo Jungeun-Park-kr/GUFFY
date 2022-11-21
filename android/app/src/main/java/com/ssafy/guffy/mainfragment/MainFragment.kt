@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.guffy.R
+import com.ssafy.guffy.activity.ChattingActivity
 import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.databinding.FragmentMainBinding
@@ -62,13 +63,16 @@ class MainFragment : Fragment() {
         // 친구 추가 버튼 클릭
         binding.mainFriendAddBtn.setOnClickListener {
 
+            // 테스트용 : 채팅 액티비티로 이동
+            moveFragment(3, "", 0)
+
             // 친구 자리 있는 경우
 //            GlobalScope.launch {
 //                mainActivity.showFindingFriendDialog()
 //            }
 
             // 친구 꽉 찬 경우
-            showAlertWithMessageDialog(mainActivity, "더이상 추가할 수 없습니다", "친구는 최대 3명까지 추가할 수 있습니다.", "FriendsFull")
+            // showAlertWithMessageDialog(mainActivity, "더이상 추가할 수 없습니다", "친구는 최대 3명까지 추가할 수 있습니다.", "FriendsFull")
         }
     }
 
@@ -84,7 +88,7 @@ class MainFragment : Fragment() {
             2 -> mainActivity.logout()
             // 채팅창 이동...
             3 -> {
-
+                startActivity(Intent(mainActivity, ChattingActivity::class.java))
             }
         }
         transaction.commit()

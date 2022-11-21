@@ -19,6 +19,7 @@ class ChattingAdapter(val list:MutableList<ChattingItemDto>, val nickname: Strin
     RecyclerView.Adapter<ChattingAdapter.MessageHolder>() {
 
     var dataformat = SimpleDateFormat("MM/dd hh:mm", Locale("ko", "KR"))
+    val formatter = SimpleDateFormat("MM/dd H:mm", Locale("ko", "KR"))
 
     inner class MessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindingInfo(item: ChattingItemDto) {
@@ -27,12 +28,12 @@ class ChattingAdapter(val list:MutableList<ChattingItemDto>, val nickname: Strin
                 binding.otherSide.visibility = View.GONE
                 binding.mySide.visibility = View.VISIBLE
                 binding.myMessageTv.text = item.message
-                binding.myTimeTv.text = dataformat.format(Date(item.time)).toString()
+                binding.myTimeTv.text = formatter.format(Date(item.time)).toString()
             } else { // 내가 쓴 글.
                 binding.otherSide.visibility = View.VISIBLE
                 binding.mySide.visibility = View.GONE
                 binding.otherMessageTv.text = item.message
-                binding.otherTimeTv.text = dataformat.format(Date(item.time)).toString()
+                binding.otherTimeTv.text = formatter.format(Date(item.time)).toString()
             }
         }
     }
