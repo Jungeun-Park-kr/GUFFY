@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "490143313384",
+    "project_id": "guffy-d01dd",
+    "storage_bucket": "guffy-d01dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490143313384:android:2d4ed689aa85461d4c485d",
+        "android_client_info": {
+          "package_name": "com.ssafy.guffy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490143313384-epejcqnoqiv39kicrui35ut0h0rpadso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTcpGLwbXepnFLYFP6Nk92lxjnzSGT_hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "490143313384-epejcqnoqiv39kicrui35ut0h0rpadso.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
