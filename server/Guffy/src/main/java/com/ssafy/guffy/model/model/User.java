@@ -16,12 +16,37 @@ public class User {
     private String interest4;
     private String interest5;
     
-    
+   
     public User() {
-        super();
-    }
+		super();
+	}
+    
 
-    public User(Integer id, String email, String pw, String nickname, String gender, String mbti, String interest1,
+	public User(String email, String pw) {
+		super();
+		this.email = email;
+		this.pw = pw;
+	}
+	
+	
+
+	public User(Integer id, String email, String nickname, String gender, String mbti, String interest1,
+			String interest2, String interest3, String interest4, String interest5) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.nickname = nickname;
+		this.gender = gender;
+		this.mbti = mbti;
+		this.interest1 = interest1;
+		this.interest2 = interest2;
+		this.interest3 = interest3;
+		this.interest4 = interest4;
+		this.interest5 = interest5;
+	}
+
+
+	public User(Integer id, String email, String pw, String nickname, String gender, String mbti, String interest1,
             String interest2, String interest3, String interest4, String interest5) {
         super();
         this.id = id;
@@ -87,11 +112,7 @@ public class User {
     public Integer getId() {
         return id;
     }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
+    
     public String getPw() {
         return pw;
     }
@@ -167,6 +188,13 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", pw=" + pw + ", nickname=" + nickname + ", gender=" + gender
+				+ ", mbti=" + mbti + ", interest1=" + interest1 + ", interest2=" + interest2 + ", interest3="
+				+ interest3 + ", interest4=" + interest4 + ", interest5=" + interest5 + "]";
+	}
 
     
 }
