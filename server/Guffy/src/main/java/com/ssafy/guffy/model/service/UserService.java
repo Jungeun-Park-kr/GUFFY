@@ -15,6 +15,13 @@ public interface UserService {
     public User select(String email);
     
     /**
+     * 이메일, 비밀번호 입력받아 로그인 
+     * @param user
+     * @return 사용자 정보 반환
+     */
+    public User login(User user);
+    
+    /**
      * 모든 사용자 정보 조회
      * @return
      */

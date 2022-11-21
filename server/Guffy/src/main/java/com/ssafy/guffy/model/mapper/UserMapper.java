@@ -10,6 +10,7 @@ import com.ssafy.guffy.model.model.User;
 
 public interface UserMapper {
     User select(String email);
+    User login(User user);
     List<User> selectAll();
     int update(User user);
     int create(User user);

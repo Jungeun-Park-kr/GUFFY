@@ -40,7 +40,7 @@ public class MailService {
         SimpleMailMessage simpleMessage = new SimpleMailMessage(); // 단순 텍스트 메일 메시지 생성시 사용
         simpleMessage.setTo(userEmail);
         simpleMessage.setSubject("GUFFY 이메일 인증");
-        simpleMessage.setText("임시 비밀번호 : "+getRandStr()+"\n임시 비밀번호로 로그인 후 비밀번호를 꼭 변경해주세요.");
+        simpleMessage.setText("임시 비밀번호 : "+tempPw+"\n임시 비밀번호로 로그인 후 비밀번호를 꼭 변경해주세요.");
         
         try {
             javaMailSender.send(simpleMessage); // 메일 발송
@@ -60,9 +60,9 @@ public class MailService {
 
         String str = "";
 
-        // 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 구문을 작성함
+        // 문자 배열 길이의 값을 랜덤으로 8개를 뽑아 구문을 작성함
         int idx = 0;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 8; i++) {
             idx = (int) (charSet.length * Math.random());
             str += charSet[idx];
         }

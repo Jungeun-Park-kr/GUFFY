@@ -3,6 +3,7 @@ package com.ssafy.guffy.controller.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,11 @@ public class MailController {
     @Autowired
     private UserService userService;
     
+    @Autowired
     private MailService mailService;
+    
+    @Autowired
+    private PasswordEncoder pwEncoder;
     
     public MailController(MailService service) {
         this.mailService = service;
@@ -43,14 +48,23 @@ public class MailController {
     public String sendTempPwMailAndUpdatePw(@RequestParam String email) {
         String result = mailService.sendTempPw(email);
         if(result != "fail") {
-            log.info("email 발송 성공");
-
+            log.info("새 비번:"+result+", email 발송 성공");
+            
             // 회원 비밀번호를 임시 비밀번호로 변경
             User user = userService.select(email);
-            user.setPw(result);
-            userService.update(user);
             
-            return "success";            
+            if (user == null) return "fail";
+            String curPw = user.getPw();
+            
+            user.setPw(pwEncoder.encode(result)); // result 를 암호화해서 저장
+            
+            if(!curPw.equals(user.getPw())) {
+            	log.info("새 비번 암호화:"+user.getPw());
+            }
+            if(userService.update(user) == 1) { // 암호화된 새 임시비번으로 DB 수정
+            	return "success";
+            }
+            	            
         }
         return "fail";
     }

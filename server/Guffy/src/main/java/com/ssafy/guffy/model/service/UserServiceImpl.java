@@ -56,4 +56,9 @@ public class UserServiceImpl implements UserService {
         return mapper.friend(friend_id);
     }
 
+	@Override
+	public User login(User user) {
+		return mapper.login(user);
+	}
+
 }
