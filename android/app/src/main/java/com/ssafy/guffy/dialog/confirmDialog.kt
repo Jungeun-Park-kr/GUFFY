@@ -87,8 +87,9 @@ class ConfirmDialog(
         super.onDestroyView()
         _binding = null
     }
+
+    interface ConfirmDialogInterface {
+        fun onYesButtonClick(id: String) // 확인 버튼 클릭을 처리해줄 인터페이스 (호출한 곳에서 나중에 구현해줘야 합니다!)
+    }
 }
 
-interface ConfirmDialogInterface {
-    fun onYesButtonClick(id: String) // 확인 버튼 클릭을 처리해줄 인터페이스 (호출한 곳에서 나중에 구현해줘야 합니다!)
-}
