@@ -16,10 +16,17 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ssafy.guffy.Adapter.ChattingAdapter
+import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.Service.RetrofitInterface
 import com.ssafy.guffy.databinding.ActivityChattingBinding
 import com.ssafy.guffy.databinding.ItemChatMessageBinding
 import com.ssafy.guffy.dto.ChattingItemDto
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.awaitResponse
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 
@@ -37,21 +44,23 @@ class ChattingActivity : AppCompatActivity() {
     var myNickName = "" // 내 닉네임은 저장해두자. String에
     lateinit var chattingRoomId: String
 
+    private var lastChatTime:Long = 0
+    
+    private var myUser = ""
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChattingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // mainFragment에서 넘어온 채팅방 아이디
+        chattingRoomId = intent.getStringExtra("chatting_room_id").toString()
+        friendNickname = intent.getStringExtra("friend_nickname").toString()
+        myNickName = intent.getStringExtra("user_nickname").toString()
+        myUser = intent.getStringExtra("user_nickname").toString() // 내가 user1인지 user2인지 저장
 
-        // main acitivity 에서 친구이름 받아오기
-/*        myNickName = "지워니"
-        friendNickname = "쩡으니"
-        chattingRoomId = "1"*/
-
-        myNickName = "쩡으니" // 내 닉네임은 저장해두자. String에
-        friendNickname = "지워니"
-        chattingRoomId = "1"
+        Log.d(TAG, "onCreate: 채팅방 아이디 : $chattingRoomId")
 
         initView()
         initFirebase()
@@ -81,6 +90,7 @@ class ChattingActivity : AppCompatActivity() {
                 thisChattingRoomRef.push().setValue(chattingItem).addOnSuccessListener {
                     // 성공시 edit text 지우기
                     binding.chattingMessageEt.setText("")
+                    lastChatTime = time // 가장 최근에 채팅 보낸 시간 저장
                 }
 
             }
@@ -88,8 +98,21 @@ class ChattingActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        // 마지막에 채팅창에 머무른 시간 가져오기
+        val lastVisitedTime = System.currentTimeMillis()
 
-    fun initFirebase() {
+        // 서버에 마지막 채팅시간, 마지막 방문시간 저장하기
+        val retrofitInterface = ApplicationClass.wRetrofit.create(RetrofitInterface::class.java)
+        CoroutineScope(Dispatchers.IO).launch {
+//            val result = retrofitInterface.
+        }
+
+    }
+
+
+    private fun initFirebase() {
         // firebase 데이터베이스 관리 객체 얻어오기
         thisChattingRoomRef = Firebase.database.getReference("chattingRoomId").child(chattingRoomId)
 
@@ -121,9 +144,7 @@ class ChattingActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
             }
-
         }
-
         thisChattingRoomRef.addChildEventListener(childEventListener)
     }
 }

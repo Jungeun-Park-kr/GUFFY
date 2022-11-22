@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 // 앱이 실행될 때 1번만 실행이 됨
 class ApplicationClass : Application() {
 
-    val SERVER_URL = "http://guffy.ssaverytime.kr:9999"
-//    val SERVER_URL = "http://192.168.80.193:8080"
+//    val SERVER_URL = "http://guffy.ssaverytime.kr:9999"
+    val SERVER_URL = "http://192.168.80.193:8080"
 
     companion object {
 
