@@ -55,7 +55,8 @@ class MainFragment : Fragment() {
     private var friendsIdList = mutableListOf<FriendListItem>()
     
     private var username: String = ""
-    private var userId: Int = -1
+    private var userId: Int = 0
+    private var userEmail:String = "je991025@gmail.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,7 @@ class MainFragment : Fragment() {
 
         val retrofitInterface = ApplicationClass.wRetrofit.create(RetrofitInterface::class.java)
         CoroutineScope(Dispatchers.Main).launch {
-            val result = retrofitInterface.getUser("je991025@gmail.com")
+            val result = retrofitInterface.getUser(userEmail)
             username = result.nickname
             userId = result.id
         }
@@ -87,7 +88,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initData()
-
 
         // 설정 버튼 추가
         binding.mainSettingBtn.setOnClickListener {
@@ -158,43 +158,33 @@ class MainFragment : Fragment() {
 
     private fun initData() {
         // 서버에서 필요한 데이터 가져오기
-        var userEmail = "je991025@gmail.com"
+
         //var list = ApplicationClass.retrofitService.getFriendIdList(userEmail)
         //Log.d(TAG, "initData: list: $list")
 
         // coroutine으로 호출 (코드 훨씬 짧아짐)
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             val myInfo = retrofitService.getUser(userEmail)
             username = myInfo.nickname
             Log.d(TAG, "내 닉네임: ${myInfo.nickname}")
+            binding.userNameTv.text = username
 
-            val result = retrofitService.getFriendIdList(userEmail).awaitResponse()
-            if(result.body() != null) {
-                friendsIdList = result.body() as MutableList<FriendListItem>
+            val result = retrofitService.getFriendIdList(userEmail)
+            if(result.isNotEmpty()) {
+                friendsIdList = result as MutableList<FriendListItem>
                 Log.d(TAG, "friendsIdList: $${friendsIdList}")
-                /*result.enqueue(object:Callback<List<FriendListItem>> {
-                    override fun onResponse(
-                        call: Call<List<FriendListItem>>,
-                        response: Response<List<FriendListItem>>
-                    ) {
-                        val response = response.body() as List<FriendListItem>
-                        Log.d(TAG, "onResponse: response: $response")
-                    }
-    
-                    override fun onFailure(call: Call<List<FriendListItem>>, t: Throwable) {
-                        TODO("Not yet implemented")
-                    }
-                })*/
 
                 for(i in friendsIdList) {
                     if(i.deleted == 1) { // 친구가 날 삭제했음
                         friendList.add(FriendItemDto(i.friend_id,i.chat_id.toInt(),"대화 불가능한 사용자", "", "", 3, ""))
                     } else {
-                        Log.d(TAG, "initData: FriendId: ${i.friend_id}, chatId: ${i.chat_id}")
+                        Log.d(TAG, "initData: FriendId: ${i.friend_id}, chatId: ${i.chat_id}, deleted: ${i.deleted}")
                         addFriendInfo(i.friend_id, i.chat_id)
                     }
                 }
-                launch(Dispatchers.Main) {
+
+                delay(100) // 이거 없으면 아래 코드가 먼저 실행돼버림..
+                //launch(Dispatchers.Main) {
                     Log.d(TAG, "onViewCreated: friendlist: $friendList")
                     adapter = FriendAdapter(friendList, username)
                     adapter.setItemClickListener(object:FriendAdapter.OnItemClickListener{
@@ -222,7 +212,8 @@ class MainFragment : Fragment() {
                     })
                     binding.contactListRecyclerView.adapter = adapter
                     binding.contactListRecyclerView.layoutManager = LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false)
-                }
+
+                //}
             } else {
                 Log.d(TAG, "initData: 친구 목록 없음")
             }
@@ -304,12 +295,21 @@ class MainFragment : Fragment() {
                 interest += " #${friend.interest5}"
             }
             var state = 0 // default
-            if(friend.user2_last_chatting_time == 0L) { // 새로 추가된 경우 (아직 user2가 채팅 시작 안함)
-                state = 1 // 새로 추가된 친구
+            if (friend.friend == "user1" && friend.user2_last_visited_time == 0L) {
+                Log.d(TAG, "addFriendInfo: 내가 user2이고 첫접속 알림")
+                // 내가 user2 <= 친구가 user1 이고 내가 아직 채팅방 안 들어간 경우 : 첫 접속을 알리기
+                state = 1
+            } else if (friend.friend == "user2" && friend.user1_last_visited_time == 0L) {
+                Log.d(TAG, "addFriendInfo: 내가 user1이고 첫접속 알림")
+                // 내가 user1 이고, 내가 아직 접속 안 한 경우
+                state = 1 // 새로 추가된 상태임을 알리기
+                
             } else {
                 if(friend.friend == "user2" && (friend.user1_last_visited_time < friend.user2_last_chatting_time)) { // 내가 user1 <= 친구가 user2인경우
+                    Log.d(TAG, "addFriendInfo: 내가 user1이고 새채팅 알림")
                     state = 2 // 새 메시지 온 경우
-                } else if (friend.user2_last_visited_time < friend.user1_last_chatting_time) { // 내가 user2
+                } else if (friend.friend == "user1" && (friend.user2_last_visited_time < friend.user1_last_chatting_time)) { // 내가 user2
+                    Log.d(TAG, "addFriendInfo: 내가 user2이고 새채팅 알림")
                     state = 2 // 새 메시지 온 경우
                 }
             }

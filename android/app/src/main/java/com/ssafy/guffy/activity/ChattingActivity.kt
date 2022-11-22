@@ -17,6 +17,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ssafy.guffy.Adapter.ChattingAdapter
 import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitChatroomInterface
 import com.ssafy.guffy.Service.RetrofitInterface
 import com.ssafy.guffy.databinding.ActivityChattingBinding
 import com.ssafy.guffy.databinding.ItemChatMessageBinding
@@ -104,9 +105,17 @@ class ChattingActivity : AppCompatActivity() {
         val lastVisitedTime = System.currentTimeMillis()
 
         // 서버에 마지막 채팅시간, 마지막 방문시간 저장하기
-        val retrofitInterface = ApplicationClass.wRetrofit.create(RetrofitInterface::class.java)
         CoroutineScope(Dispatchers.IO).launch {
-//            val result = retrofitInterface.
+            var chattingRoom = retrofitChatroomInterface.getChattingRoom(chattingRoomId.toInt())
+            if(myUser == "user1") { // 내가 user1
+                chattingRoom.user1LastChattingTime = lastChatTime
+                chattingRoom.user1LastVisitedTime = lastVisitedTime
+            } else { // 내가 user2
+                chattingRoom.user2LastChattingTime = lastChatTime
+                chattingRoom.user2LastVisitedTime = lastVisitedTime
+            }
+            retrofitChatroomInterface.updateChattingRoom(chattingRoom)
+            Log.d(TAG, "onStop: 시간 갱신 완료! lastVisitedTime : $lastVisitedTime")
         }
 
     }
