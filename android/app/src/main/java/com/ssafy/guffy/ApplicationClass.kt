@@ -1,6 +1,7 @@
 package com.ssafy.guffy;
 
 import android.app.Application
+import com.ssafy.guffy.Service.RetrofitInterface
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -14,7 +15,7 @@ class ApplicationClass : Application() {
 
         // 전역변수 문법을 통해 Retrofit 인스턴스를 앱 실행 시 1번만 생성하여 사용 (싱글톤 객체)
         lateinit var wRetrofit : Retrofit
-        //lateinit var retrofitService:RetrofitService
+        lateinit var retrofitService:RetrofitInterface
     }
 
     override fun onCreate() {
@@ -25,6 +26,6 @@ class ApplicationClass : Application() {
                 .baseUrl(SERVER_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-        //retrofitService = wRetrofit.create(RetrofitService::class.java)
+        retrofitService = wRetrofit.create(RetrofitInterface::class.java)
     }
 }
