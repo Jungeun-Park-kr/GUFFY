@@ -55,12 +55,12 @@ class ChattingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // mainFragment에서 넘어온 채팅방 아이디
-        chattingRoomId = intent.getStringExtra("chatting_room_id").toString()
+        chattingRoomId = intent.getIntExtra("chatting_room_id", -1).toString()
         friendNickname = intent.getStringExtra("friend_nickname").toString()
         myNickName = intent.getStringExtra("user_nickname").toString()
-        myUser = intent.getStringExtra("user_nickname").toString() // 내가 user1인지 user2인지 저장
+        myUser = intent.getStringExtra("user").toString() // 내가 user1인지 user2인지 저장
 
-        Log.d(TAG, "onCreate: 채팅방 아이디 : $chattingRoomId")
+        Log.d(TAG, "onCreate: 채팅방 아이디 : $chattingRoomId, 친구 이름:$friendNickname, 내이름:$myNickName")
 
         initView()
         initFirebase()

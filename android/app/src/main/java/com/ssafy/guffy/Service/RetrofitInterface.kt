@@ -1,8 +1,6 @@
 package com.ssafy.guffy.Service
 
-import com.ssafy.guffy.models.Friend
-import com.ssafy.guffy.models.FriendListItem
-import com.ssafy.guffy.models.User
+import com.ssafy.guffy.models.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -18,8 +16,12 @@ interface RetrofitInterface {
     suspend fun getUser(@Query("email") email : String):User
 
     @GET("/user/friend")
-    suspend fun getFriend(@Query("friend_id") friendId:String):Friend
+    suspend fun getFriend(@Query("user_id")userId:Int, @Query("friend_id") friendId:Int):Friend
 
     @POST("/chatroom")
-    suspend fun createChattingRoom(@Query("user_id") user_id:String):Int
+    suspend fun createChattingRoom(@Query("user_id") user_id:Int): FriendChat
+
+    @GET("/friendsNum")
+    suspend fun getFriendsNum(@Query("user_id") userId:Int): FriendsNum
+
 }
