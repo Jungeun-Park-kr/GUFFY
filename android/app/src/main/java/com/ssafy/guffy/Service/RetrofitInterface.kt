@@ -18,10 +18,4 @@ interface RetrofitInterface {
     @GET("/user/friend")
     suspend fun getFriend(@Query("user_id")userId:Int, @Query("friend_id") friendId:Int):Friend
 
-    @POST("/chatroom")
-    suspend fun createChattingRoom(@Query("user_id") user_id:Int): FriendChat
-
-    @GET("/friendsNum")
-    suspend fun getFriendsNum(@Query("user_id") userId:Int): FriendsNum
-
 }

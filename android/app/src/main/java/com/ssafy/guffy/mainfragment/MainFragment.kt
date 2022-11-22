@@ -11,19 +11,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.guffy.Adapter.FriendAdapter
 import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitChatroomInterface
 import com.ssafy.guffy.ApplicationClass.Companion.retrofitService
+import com.ssafy.guffy.ApplicationClass.Companion.wRetrofit
 import com.ssafy.guffy.R
+import com.ssafy.guffy.Service.RetrofitChatroomInterface
 import com.ssafy.guffy.Service.RetrofitInterface
 import com.ssafy.guffy.activity.ChattingActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.databinding.FragmentMainBinding
+import com.ssafy.guffy.dialog.FindingFriendDialog
 import com.ssafy.guffy.dto.FriendItemDto
 import com.ssafy.guffy.models.FriendListItem
+import com.ssafy.guffy.util.Common
+import com.ssafy.guffy.util.Common.Companion.showAlertDialog
 import com.ssafy.guffy.util.Common.Companion.showAlertWithMessageDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -92,30 +95,47 @@ class MainFragment : Fragment() {
 
         // 친구 추가 버튼 클릭
         binding.mainFriendAddBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                val result = retrofitService.getFriendsNum(userId)
+            CoroutineScope(Dispatchers.IO).launch {
+                val result = retrofitChatroomInterface.getFriendsNum(userId)
                 Log.d(TAG, "onViewCreated: 나의 친구 수: $result")
 
                 if(result.friendsNum < 3) { // 친구 3명 미만
-
                     mainActivity.showFindingFriendDialog()
-
+                    Log.d(TAG, "onViewCreated: 33333")
                     // 여기서 친구 추가 작업 해주기
-                    val newFriendChat = retrofitService.createChattingRoom(userId)
-
+                    val retrofit = wRetrofit.create(RetrofitChatroomInterface::class.java)
+                    val newFriendChat = retrofit.createChattingRoom(userId)
+                    Log.d(TAG, "onViewCreated: 새로생긴 채팅룸id: ${newFriendChat.chat_id}")
                     if(newFriendChat.chat_id > 0) {
+                        Log.d(TAG, "onViewCreated: 44444")
                         Log.d(TAG, "onViewCreated: 새 채팅창 생성 성공 + $newFriendChat")
 
-                        // 새 친구 데이터 불러와서 리스트에 추가하기
-                        addFriendInfo(newFriendChat.friend_id, newFriendChat.chat_id.toString())
-                        adapter.notifyItemInserted(friendList.size) // 어댑터 갱신
+                        launch(Dispatchers.Main) {
+                            // 새 친구 데이터 불러와서 리스트에 추가하기
+                            addFriendInfo(newFriendChat.friend_id, newFriendChat.chat_id.toString())
+                            adapter.notifyItemInserted(friendList.size) // 어댑터 갱신
+
+                            showAlertWithMessageDialog(
+                                mainActivity,
+                                "새로운 친구를 추가했습니다.",
+                                "친구와 새로운 채팅을 시작해보세요!",
+                                "FriendsAddSucceeded"
+                            )
+                            Log.d(TAG, "onViewCreated: 55555")
+                        }
+
                     } else {
-                        showAlertWithMessageDialog(mainActivity, "친구 추가를 실패했습니다.", "다시 시도해주세요.", "FriendsAddFailed")
+                        launch(Dispatchers.Main) {
+                            showAlertWithMessageDialog(mainActivity, "친구 추가를 실패했습니다.", "다시 시도해주세요.", "FriendsAddFailed")
+                        }
+
                     }
 
-
                 } else { // 친구 3명 꽉 찬 경우
-                    showAlertWithMessageDialog(mainActivity, "더이상 추가할 수 없습니다", "친구는 최대 3명까지 추가할 수 있습니다.", "FriendsFull")
+                    //launch(Dispatchers.Main) {
+                        showAlertWithMessageDialog(mainActivity, "더이상 추가할 수 없습니다", "친구는 최대 3명까지 추가할 수 있습니다.", "FriendsFull")
+                    //}
+
                 }
             }
         }
@@ -194,7 +214,6 @@ class MainFragment : Fragment() {
                             // 채팅 상태 초기화
                             friendList[position].state = 0
                             adapter.notifyItemChanged(position)
-
                         }
                     })
                     binding.contactListRecyclerView.adapter = adapter

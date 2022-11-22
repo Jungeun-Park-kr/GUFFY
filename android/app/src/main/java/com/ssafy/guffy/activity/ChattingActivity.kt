@@ -116,7 +116,7 @@ class ChattingActivity : AppCompatActivity() {
         // firebase 데이터베이스 관리 객체 얻어오기
         thisChattingRoomRef = Firebase.database.getReference("chattingRoomId").child(chattingRoomId)
 
-        childEventListener = object : ChildEventListener{
+        childEventListener = object : ChildEventListener {
             @SuppressLint("NotifyDataSetChanged")
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildAdded: $snapshot")

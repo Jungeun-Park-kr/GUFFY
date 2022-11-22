@@ -12,6 +12,7 @@ import com.ssafy.guffy.databinding.ActivityMainBinding
 import com.ssafy.guffy.dialog.FindingFriendDialog
 import com.ssafy.guffy.fragment.LoginFragment
 import com.ssafy.guffy.mainfragment.MainFragment
+import com.ssafy.guffy.util.Common
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -56,16 +57,18 @@ class MainActivity : AppCompatActivity(), ConfirmDialogInterface {
 
 
     suspend fun showFindingFriendDialog() {
-        // 끝날때까지 기다리기
-        val dialog = FindingFriendDialog(this)
-        dialog.isCancelable = false // 배경 클릭 막기
-        dialog.show(this.supportFragmentManager, "FindingFriendDialog")
-
-        // 여기서 친구 찾아서 추가해주는 작업 하기 (코루틴 쓰기)
         CoroutineScope(Dispatchers.Main).launch {
-            findingFriend("CurrentUserID")
+            // 끝날때까지 기다리기
+            val dialog = FindingFriendDialog(this@MainActivity)
+            dialog.isCancelable = false // 배경 클릭 막기
+            dialog.show(this@MainActivity.supportFragmentManager, "FindingFriendDialog")
+
+            // 여기서 친구 찾아서 추가해주는 작업 하기 (코루틴 쓰기)
+
+                delay (2000)
+            //findingFriend("CurrentUserID")
+            dialog.dismiss()
         }.join()
-        dialog.dismiss()
     }
 
     private suspend fun findingFriend(id: String) { // suspend : CoroutineScope 안에서만 가능함!!

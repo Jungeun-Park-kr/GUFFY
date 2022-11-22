@@ -1,9 +1,11 @@
 package com.ssafy.guffy;
 
 import android.app.Application
+import com.ssafy.guffy.Service.RetrofitChatroomInterface
 import com.ssafy.guffy.Service.RetrofitInterface
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 // 앱이 실행될 때 1번만 실행이 됨
 class ApplicationClass : Application() {
@@ -16,6 +18,7 @@ class ApplicationClass : Application() {
         // 전역변수 문법을 통해 Retrofit 인스턴스를 앱 실행 시 1번만 생성하여 사용 (싱글톤 객체)
         lateinit var wRetrofit : Retrofit
         lateinit var retrofitService:RetrofitInterface
+        lateinit var retrofitChatroomInterface: RetrofitChatroomInterface
     }
 
     override fun onCreate() {
@@ -27,5 +30,6 @@ class ApplicationClass : Application() {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         retrofitService = wRetrofit.create(RetrofitInterface::class.java)
+        retrofitChatroomInterface = wRetrofit.create(RetrofitChatroomInterface::class.java)
     }
 }
