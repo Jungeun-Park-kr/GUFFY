@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ssafy.guffy.dialog.ConfirmDialog
-import com.ssafy.guffy.dialog.ConfirmDialogInterface
 import com.ssafy.guffy.R
 import com.ssafy.guffy.databinding.ActivityMainBinding
 import com.ssafy.guffy.dialog.FindingFriendDialog
@@ -18,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), ConfirmDialogInterface {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,31 +27,6 @@ class MainActivity : AppCompatActivity(), ConfirmDialogInterface {
             .beginTransaction()
             .replace(R.id.frame_layout_main, MainFragment())
             .commit()
-    }
-
-    /*fun showAlertDialog(title:String, message:String) {
-        MaterialAlertDialogBuilder(this@MainActivity)
-            .setTitle(title)
-            .setMessage(message)
-            .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
-                // Respond to neutral button press
-            }
-            .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
-                // Respond to positive button press
-            }
-            .show()
-    }*/
-
-    fun deleteFriend(title:String, message:String) {
-        val dialog = ConfirmDialog(this, "진짜로 삭제하시겠습니까?", "다시 못되돌립니당", "삭제할친구ID_asdf")
-        // 알림창이 띄워져있는 동안 배경 클릭 막기
-        dialog.isCancelable = false
-        dialog.show(this.supportFragmentManager, "ConfirmDialog")
-    }
-
-    override fun onYesButtonClick(id: String) {
-        TODO("id로 넘어온 친구 삭제하기")
-        // id : 삭제할 친구의 id
     }
 
 
