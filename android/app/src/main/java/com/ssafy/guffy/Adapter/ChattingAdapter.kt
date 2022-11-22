@@ -4,26 +4,27 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.guffy.R
-import com.ssafy.guffy.databinding.ActivityChattingBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.ssafy.guffy.databinding.ItemChatMessageBinding
 import com.ssafy.guffy.dto.ChattingItemDto
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 private const val TAG = "ChattingAdapter 구피"
 
-class ChattingAdapter(val list:MutableList<ChattingItemDto>, val nickname: String) :
+class ChattingAdapter(var list:MutableList<ChattingItemDto>, val nickname: String) :
     RecyclerView.Adapter<ChattingAdapter.MessageHolder>() {
 
-    var dataformat = SimpleDateFormat("MM/dd hh:mm", Locale("ko", "KR"))
     val formatter = SimpleDateFormat("MM/dd H:mm", Locale("ko", "KR"))
 
-    inner class MessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MessageHolder(var binding: ItemChatMessageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindingInfo(item: ChattingItemDto) {
-            Log.d(TAG, "bindingInfo: ${item.nickname} , ${item.message}, ${dataformat.format(Date(item.time))}")
+            Log.d(TAG, "bindingInfo: ${item.nickname} , ${item.message}, ${formatter.format(Date(item.time))}")
             if (item.nickname != nickname) { // 친구가 쓴 글.
                 binding.otherSide.visibility = View.GONE
                 binding.mySide.visibility = View.VISIBLE
@@ -39,10 +40,10 @@ class ChattingAdapter(val list:MutableList<ChattingItemDto>, val nickname: Strin
     }
 
     // 뷰홀더 생성
-    private lateinit var binding: ItemChatMessageBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageHolder {
-        binding = ItemChatMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MessageHolder(binding.root)
+        var binding = ItemChatMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MessageHolder(binding)
     }
 
     // 뷰 재활용 될 때

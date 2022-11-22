@@ -1,7 +1,7 @@
 package com.ssafy.guffy.dto
 
 data class ChattingItemDto (
-    var firebaseKey: String,
+    var uid: String,
     val nickname : String,
     val message : String,
     val time : Long = 0

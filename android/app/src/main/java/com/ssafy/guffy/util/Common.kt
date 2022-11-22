@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.ssafy.guffy.dialog.AlertDialog
 import com.ssafy.guffy.dialog.AlertWithMessageDialog
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class Common {
 
@@ -36,6 +38,14 @@ class Common {
             dialog.show(context.supportFragmentManager, tag)
 
         }
+
+        /*var retrofit:Retrofit = Retrofit.Builder()
+            .baseUrl("http://guffy.ssaverytime.kr:9999/swagger-ui.html")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        var retrofitService = retrofit.create(RetrofitService::class.java)
+*/
     }
 
 
