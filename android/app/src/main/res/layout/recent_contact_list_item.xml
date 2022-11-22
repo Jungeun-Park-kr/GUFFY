@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:text="새로운 친구가 등록되었습니다. 대화를 나눠보아요"
         android:visibility="gone"
-        android:layout_below="@id/contact_list_item_name_tv"
+        android:layout_below="@id/contact_list_item_interest_tv"
         android:layout_gravity="center_vertical" />
 
 
