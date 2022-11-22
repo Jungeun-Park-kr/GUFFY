@@ -1,7 +1,7 @@
 package com.ssafy.guffy.models
 
 data class FriendsNum(
-    val friendsNum: Int,
+    var friendsNum: Int,
     val id: Int,
     val userId: Int
 )
