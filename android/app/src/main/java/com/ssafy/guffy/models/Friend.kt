@@ -2,9 +2,6 @@ package com.ssafy.guffy.models
 
 import com.google.gson.annotations.SerializedName
 
-
-
-
 data class Friend(
     val chat_id: Int,
     val email: String,
@@ -16,6 +13,7 @@ data class Friend(
     val interest3: String,
     val interest4: String,
     val interest5: String,
+    val token: String, // 친구 토큰
     val mbti: String,
     val nickname: String,
     val user1_last_chatting_time: Long,

@@ -43,6 +43,7 @@ class FriendAdapter(var list:MutableList<FriendItemDto>, val nickname: String)
             binding.contactListItemNameTv.text = item.name
             binding.contactListItemMbtiTv.text = item.mbti
             binding.contactListItemInterestTv.text = item.interest
+            binding.contactListItemGenderTv.text = item.gender
 
             when(item.state) { // 친구와의 상태
                 0 -> { // dafult : 아무것도 없음

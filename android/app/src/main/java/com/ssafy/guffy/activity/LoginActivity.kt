@@ -34,12 +34,13 @@ class LoginActivity : AppCompatActivity() {
                 "서비스를 정상적으로 이용할 수 없어 앱을 종료합니다", "")
             dialog.isCancelable = false
             dialog.show(this.supportFragmentManager, "networkUnAvailable")
+        } else {
+            supportActionBar?.hide()
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.login_frame_container, LoginFragment())
+                .commit()
         }
 
-        supportActionBar?.hide()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.login_frame_container, LoginFragment())
-            .commit()
     }
 }

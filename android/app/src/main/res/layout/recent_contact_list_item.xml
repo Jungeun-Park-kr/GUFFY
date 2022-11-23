@@ -28,6 +28,16 @@
         android:layout_toEndOf="@id/contact_list_item_name_tv"
         android:text="ISTP" />
 
+    <TextView
+        android:id="@+id/contact_list_item_gender_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/contact_list_item_name_tv"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/contact_list_item_mbti_tv"
+        android:text="(알수없음) " />
+
     <ImageView
         android:id="@+id/contact_list_item_icon"
         android:layout_width="40dp"

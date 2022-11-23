@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ssafy.guffy.R
 import com.ssafy.guffy.databinding.ActivitySplashBinding
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 private lateinit var binding : ActivitySplashBinding
 class SplashActivity : AppCompatActivity() {
@@ -17,7 +15,7 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.Main).launch {
             openLoginActivity()
         }
 
