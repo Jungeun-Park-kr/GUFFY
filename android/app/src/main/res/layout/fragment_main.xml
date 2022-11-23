@@ -27,6 +27,8 @@
         android:textColor="@color/text_black"
         app:layout_constraintBaseline_toBaselineOf="@+id/user_name_tv"
         app:layout_constraintStart_toEndOf="@id/user_name_tv"
+        android:text="님 안녕하세요!"
+        android:visibility="gone"
         android:gravity="bottom"
         android:textSize="15sp"
         android:textStyle="bold"/>
@@ -86,7 +88,7 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints">
 
-            <com.google.android.material.chip.Chip
+            <!--<com.google.android.material.chip.Chip
                 android:id="@+id/main_interest_chip_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -131,7 +133,7 @@
                 android:visibility="gone"
                 app:chipBackgroundColor="@color/none"
                 app:chipStrokeColor="@color/text_black"
-                app:chipStrokeWidth="1dp" />
+                app:chipStrokeWidth="1dp" />-->
 
 
         </com.google.android.material.chip.ChipGroup>

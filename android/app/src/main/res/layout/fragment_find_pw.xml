@@ -67,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@+id/findpw_findpw_tv">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/findpw_email_tv"
+            android:id="@+id/join_email_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -82,8 +82,5 @@
         android:layout_margin="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,60 +1,105 @@
 package com.ssafy.guffy.settingsfragment
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserInterface
 import com.ssafy.guffy.R
+import com.ssafy.guffy.activity.ChattingActivity
+import com.ssafy.guffy.activity.MainActivity
+import com.ssafy.guffy.databinding.FragmentTabItemInterestBinding
+import com.ssafy.guffy.databinding.FragmentTabItemMbtiBinding
+import com.ssafy.guffy.dialog.ConfirmNoCancelDialog
+import com.ssafy.guffy.mainfragment.MainFragment
+import com.ssafy.guffy.models.User
+import com.ssafy.guffy.util.Common
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.awaitResponse
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TabItemMbtiFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TabItemMbtiFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private lateinit var mainActivity: MainActivity
+    private lateinit var binding: FragmentTabItemMbtiBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        mainActivity = context as MainActivity
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_item_mbti, container, false)
+        binding = FragmentTabItemMbtiBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TabItemMbtiFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TabItemMbtiFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var clickedMBTIChip = -1
+//        var mbtiSaveBtn = view.findViewById(R.id.tab_item_mbti_save_btn)
+
+        binding.tabItemMbtiSaveBtn.setOnClickListener {
+            when (binding.settingsMbtiMbtiFilterChipGroup.checkedChipId) {
+                R.id.settings_mbti_isfp_chip -> clickedMBTIChip = 0
+                R.id.settings_mbti_isfj_chip -> clickedMBTIChip = 1
+                R.id.settings_mbti_istp_chip -> clickedMBTIChip = 2
+                R.id.settings_mbti_istj_chip -> clickedMBTIChip = 3
+
+                R.id.settings_mbti_intj_chip -> clickedMBTIChip = 4
+                R.id.settings_mbti_intp_chip -> clickedMBTIChip = 5
+                R.id.settings_mbti_estp_chip -> clickedMBTIChip = 6
+                R.id.settings_mbti_estj_chip -> clickedMBTIChip = 7
+
+                R.id.settings_mbti_entp_chip -> clickedMBTIChip = 8
+                R.id.settings_mbti_entj_chip -> clickedMBTIChip = 9
+                R.id.settings_mbti_infp_chip -> clickedMBTIChip = 10
+                R.id.settings_mbti_infj_chip -> clickedMBTIChip = 11
+
+                R.id.settings_mbti_esfp_chip -> clickedMBTIChip = 12
+                R.id.settings_mbti_esfj_chip -> clickedMBTIChip = 13
+                R.id.settings_mbti_enfp_chip -> clickedMBTIChip = 14
+                R.id.settings_mbti_enfj_chip -> clickedMBTIChip = 15
+
+                R.id.settings_mbti_idk_chip -> clickedMBTIChip = 16
+                R.id.settings_mbti_hate_chip -> clickedMBTIChip = 17
+                R.id.settings_mbti_private_chip -> clickedMBTIChip = 18
             }
+            if (clickedMBTIChip == -1) {
+                Common.showAlertDialog(mainActivity, "mbti를 선택해주세요", "")
+            } else {
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    var user = retrofitUserInterface.getUser(
+                        ApplicationClass.sharedPreferences.getString("email", "").toString()
+                    ).awaitResponse().body() as User
+
+                    user.mbti = Common.mbtiList.get(clickedMBTIChip)
+                    val result = retrofitUserInterface.updateUser(user).awaitResponse().body() as String
+                    if (result == "success") {
+                        val dialog = ConfirmNoCancelDialog(
+                            object : ConfirmNoCancelDialog.ConfirmNoCancelDialogInterface {
+                                override fun onYesButtonClick(id: String) {
+                                    mainActivity.openFragment(1)
+                                }
+                            }, "MBTI를 변경했습니다.",
+                            "", ""
+                        )
+                        dialog.isCancelable = false
+                        dialog.show(mainActivity.supportFragmentManager, "태그")
+                    }
+                }
+
+            }
+
+        }
     }
+
 }

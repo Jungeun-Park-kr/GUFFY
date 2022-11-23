@@ -42,15 +42,16 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginTop="20dp"
-        android:hint="아이디"
+        android:hint="이메일을 입력해주세요"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_appName">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/findpw_email_tv"
+            android:id="@+id/join_email_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:inputType="text"
+            android:layout_height="wrap_content"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,13 +64,13 @@
         android:layout_marginLeft="40dp"
         android:layout_marginTop="0dp"
         android:layout_marginRight="40dp"
-        android:hint="비밀번호"
+        android:hint="비밀번호를 입력해주세요"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/findpw_email_tvlayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_pw_tv"
+            android:id="@+id/login_pw_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />

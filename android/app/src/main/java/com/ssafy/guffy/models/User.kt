@@ -4,13 +4,25 @@ data class User(
     val email: String,
     val gender: String,
     val id: Int,
-    val interest1: String,
-    val interest2: String,
-    val interest3: String,
-    val interest4: String,
-    val interest5: String,
-    val mbti: String,
+    var interest1: String,
+    var interest2: String,
+    var interest3: String,
+    var interest4: String,
+    var interest5: String,
+    var mbti: String,
     val nickname: String,
-    val pw: String,
+    var pw: String,
     val token:String,
-)
+) {
+    constructor() : this(
+        "", "", 0, "", "", "", "", "", "", "", "",""
+    )
+
+    constructor(email: String, pw: String) : this(
+        email, "", 0, "", "", "", "", "", "", "", pw, ""
+    )
+
+    constructor(email: String, pw: String, token: String) : this(
+        email, "", 0, "", "", "", "", "", "", "", pw, token
+    )
+}

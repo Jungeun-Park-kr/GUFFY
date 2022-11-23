@@ -18,7 +18,6 @@ import com.google.firebase.ktx.Firebase
 import com.ssafy.guffy.Adapter.ChattingAdapter
 import com.ssafy.guffy.ApplicationClass
 import com.ssafy.guffy.ApplicationClass.Companion.retrofitChatroomInterface
-import com.ssafy.guffy.Service.RetrofitInterface
 import com.ssafy.guffy.databinding.ActivityChattingBinding
 import com.ssafy.guffy.databinding.ItemChatMessageBinding
 import com.ssafy.guffy.dialog.ConfirmDialog
@@ -28,10 +27,6 @@ import com.ssafy.guffy.util.Common
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.awaitResponse
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
 
 
 private lateinit var binding: ActivityChattingBinding
