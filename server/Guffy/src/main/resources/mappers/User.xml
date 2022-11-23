@@ -5,19 +5,25 @@
 <mapper namespace="com.ssafy.guffy.model.mapper.UserMapper">
 
 	<sql id="userColumns">
-		id, email, pw, nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5
+		id, email, pw, nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5, token
 	</sql>
 	<sql id="userColumnsLogin">
-		id, email, nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5
+		id, email, nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5, token
 	</sql>
 	<sql id="userColumnsJoin">
-		email, pw, nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5
+		email, pw, nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5, token
 	</sql>
 	
 	<select id="isUsed" parameterType="string" resultType="Integer">
     	select count(*)
     	from user
     	where email = #{email}
+    </select>
+    
+    <select id="isUsedName">
+    	select count(*)
+    	from user
+    	where nickname = #{name}
     </select>
     
     <select id="login" parameterType="User" resultType="User">
@@ -44,13 +50,14 @@
         insert into user(
         <include refid="userColumnsJoin" />
         ) values 
-        (#{email}, #{pw}, #{nickname},#{gender},#{mbti},#{interest1},#{interest2},#{interest3},#{interest4},#{interest5})
+        (#{email}, #{pw}, #{nickname},#{gender},#{mbti},#{interest1},#{interest2},#{interest3},#{interest4},#{interest5},#{token})
     </insert>
     
     <update id="update" parameterType="User">
         update user
         set email = #{email}, pw=#{pw}, nickname=#{nickname}, gender = #{gender}, mbti = #{mbti}
         , interest1= #{interest1}, interest2=#{interest2}, interest3=#{interest3}, interest4=#{interest4}, interest5= #{interest5}
+        , token = #{token}
         where email = #{email}
     </update>
     
@@ -65,21 +72,22 @@
 			from user
 			where email = #{email}
 			)
-		, user2_id, user1_id) as friend_id, c.id as chat_id
+		, user2_id, user1_id) as friend_id, c.id as chat_id, c.deleted as deleted
 		from user u join chatting_room c
 		on u.id in (c.user1_id, c.user2_id)
 		where u.email = #{email}
     </select>
+
     
-    <select id="friend" parameterType="Integer" resultType="Friend">
+    <select id="friend" parameterType="MeAndFriend" resultType="Friend">
 		select
 		u.id as friend_id
 		, if(c.user1_id = #{friend_id}, "user1", "user2") as friend
-		, email, u.nickname as nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5
+		, email, nickname, gender, mbti, interest1, interest2, interest3, interest4, interest5, token
 		,c.id as chat_id, user1_last_visited_time, user2_last_visited_time, user1_last_chatting_time, user2_last_chatting_time
 		from user u join chatting_room c
 		on u.id in (c.user1_id, c.user2_id)
-		where u.id = #{friend_id};
+		where u.id = #{friend_id} and (c.user1_id = #{user_id} or c.user2_id = #{user_id})
     </select>
     
 </mapper>

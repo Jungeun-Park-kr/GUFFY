@@ -1,0 +1,148 @@
+package com.ssafy.guffy.controller.rest;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.guffy.model.model.ChatFriend;
+import com.ssafy.guffy.model.model.ChattingRoom;
+import com.ssafy.guffy.model.model.FriendsNum;
+import com.ssafy.guffy.model.service.ChattingRoomService;
+import com.ssafy.guffy.model.service.FriendsNumService;
+
+import io.swagger.annotations.ApiOperation;
+
+@RestController
+@RequestMapping("/chatroom")
+@CrossOrigin("*")
+public class ChattingRoomController {
+
+	private static final Logger log = LoggerFactory.getLogger(ChattingRoomController.class);
+
+	@Autowired
+	private ChattingRoomService service;
+
+	@Autowired
+	private FriendsNumService friendsNumService;
+
+	@GetMapping("")
+	@ApiOperation(value = "채팅방 아이디로 row를 전체 조회한다.")
+	public ChattingRoom select(@RequestParam String id) {
+		log.info("message: "+service.select(id));
+		return service.select(id);
+	}
+
+	@DeleteMapping("")
+	@ApiOperation("채팅방 아이디에 해당하는 row를 삭제한다.")
+	public int delete(@RequestParam String id) { // 채팅방 아이디
+		// 채팅방 아이디로 전체 row 찾아오기
+		ChattingRoom chattingRoom = service.select(id);
+
+		// u1 friendsNum 테이블에서 count--
+		FriendsNum u1FriendsNum = friendsNumService.select(chattingRoom.getUser1Id());
+		u1FriendsNum.setFriendsNum(Math.max(u1FriendsNum.getFriendsNum() - 1, 0));
+		friendsNumService.update(u1FriendsNum);
+
+		// u2 friendsNum 테이블에서 count--
+		FriendsNum u2FriendsNum = friendsNumService.select(chattingRoom.getUser2Id());
+		u2FriendsNum.setFriendsNum(Math.max(u2FriendsNum.getFriendsNum() - 1, 0));
+		friendsNumService.update(u2FriendsNum);
+
+		// 채팅방 삭제
+		return service.delete(id);
+	}
+
+	@PostMapping("")
+	@ApiOperation("새로운 채팅방을 추가한다. 새로운 채팅방 생성시 채팅방 id, 실패시 0, 더이상 연결할 수 있는 친구가 없을 때-1 ")
+	public ChatFriend create(@RequestParam String user_id) { // 파라미터에 user1에만 들어있음
+		String user2Id = "";
+		// 새로운 친구 연결
+		log.info("가져왔어요 1 ");
+		List<FriendsNum> newFriendsList = friendsNumService.findNewFriends();
+		log.info("newFriendsList>> ");
+		log.info(newFriendsList.toString() + "\n");
+		
+		
+		log.info("가져왔어요 2 ");
+		List<ChatFriend> myFriendsList = service.getMyFriends(user_id);
+		log.info("myFriendsList>> ");
+		log.info(myFriendsList.toString() + "\n");
+	
+		
+		boolean firstConnect = true;
+		boolean dontConnectMyself = true;
+
+	
+		if (newFriendsList.get(0).getFriendsNum() >= 3) { // 오름차순 정렬했는데 0번째 친구가 꽉찬거면 다 꽉찬거임
+			log.warn("여기니?");
+			return new ChatFriend(-1, -1);
+		}
+		for (FriendsNum newOne : newFriendsList) { // 5개(그거보다 작다면 최대 크기만큼) 중에
+			// log.info("새로운 친구 =  " + newOne.getId().toString());
+			
+			firstConnect = true;
+			dontConnectMyself = true;
+			
+			if (newOne.getId().toString().equals(user_id)) { // 자기자신과 연결하지말것
+				dontConnectMyself = false;
+				log.info("나랑 똑같아요");
+			}
+			for (ChatFriend friend : myFriendsList) { // 이미 연결된 친구와 새로 연결할 친구가 다르면
+				if (newOne.getUserId().toString().equals(friend.getFriend_id().toString())) {
+					firstConnect = false;
+					break;
+				}
+			}
+
+			if (firstConnect && dontConnectMyself) {
+				user2Id = newOne.getUserId().toString();
+				log.info("user2Id : " + user2Id);
+				break;
+			}
+		}
+
+		if (user2Id.equals("")) { // 추가 가능한 친구 없음 (모든 친구 꽉 참)
+			log.warn("여기니?");
+			return new ChatFriend(-1, -1);
+		}
+
+		// friendsNum 의 테이블에 user1, user2 업데이트할것,
+		FriendsNum user1 = friendsNumService.select(user_id);
+		user1.setFriendsNum(user1.getFriendsNum() + 1);
+		friendsNumService.update(user1);
+
+		FriendsNum user2 = friendsNumService.select(user2Id);
+		user2.setFriendsNum(user2.getFriendsNum() + 1);
+		friendsNumService.update(user2);
+
+		ChattingRoom chattingRoom = new ChattingRoom(user_id, user2Id, 0L, 0L, 0L, 0L);
+		service.create(chattingRoom);
+
+		ChatFriend newChatFriend = new ChatFriend(user2.getUserId(), chattingRoom.getId());
+		return newChatFriend; // 생성된 채팅룸 id 리턴
+	}
+
+	@GetMapping("/isUsed")
+	@ApiOperation("현재 사용중인 채팅방 아이디인지 검사한다.\n 0이라면 사용가능한 채팅방 아이디이다.")
+	public int isUsed(@RequestParam String id) {
+		return service.isUsed(id);
+	}
+
+	@PutMapping("")
+	@ApiOperation("request parameter로 전송된 채팅방 내용으로 채팅방을 업데이트한다.")
+	public int update(@RequestBody ChattingRoom chattingRoom) {
+		return service.update(chattingRoom);
+	}
+
+}

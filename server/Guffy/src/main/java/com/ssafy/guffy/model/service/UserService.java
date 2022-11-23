@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ssafy.guffy.model.model.ChatFriend;
 import com.ssafy.guffy.model.model.Friend;
+import com.ssafy.guffy.model.model.MeAndFriend;
 import com.ssafy.guffy.model.model.User;
 
 public interface UserService {
@@ -67,5 +68,12 @@ public interface UserService {
      * @param friend_id
      * @return
      */
-    Friend friend(Integer friend_id);
+    Friend friend(MeAndFriend meAndFriend);
+    
+    /**
+     * 이미 사용중인 닉네임인지 확인한다.
+     * @param name
+     * @return
+     */
+    int isUsedName(String name);
 }

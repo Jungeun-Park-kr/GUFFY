@@ -12,6 +12,7 @@ public class Friend {
     private String interest3;
     private String interest4;
     private String interest5;
+    private String token;
     private Integer chat_id; // 이 친구와 참여중인 채팅방의 id
     private Long user1_last_visited_time;
     private Long user2_last_visited_time;
@@ -21,7 +22,8 @@ public class Friend {
    
 
     public Friend(Integer friend_id, String friend, String email, String nickname, String gender, String mbti,
-            String interest1, String interest2, String interest3, String interest4, String interest5, Integer chat_id) {
+            String interest1, String interest2, String interest3, String interest4, String interest5, String token
+            , Integer chat_id) {
         super();
         this.friend_id = friend_id;
         this.friend = friend;
@@ -38,8 +40,8 @@ public class Friend {
     }
 
     public Friend(Integer friend_id, String friend, String email, String nickname, String gender, String mbti,
-            String interest1, String interest2, String interest3, String interest4, String interest5, Integer chat_id,
-            Long user1_last_visited_time, Long user2_last_visited_time, Long user1_last_chatting_time,
+            String interest1, String interest2, String interest3, String interest4, String interest5,String token,
+            Integer chat_id, Long user1_last_visited_time, Long user2_last_visited_time, Long user1_last_chatting_time,
             Long user2_last_chatting_time) {
         super();
         this.friend_id = friend_id;
@@ -53,6 +55,7 @@ public class Friend {
         this.interest3 = interest3;
         this.interest4 = interest4;
         this.interest5 = interest5;
+        this.token = token;
         this.chat_id = chat_id;
         this.user1_last_visited_time = user1_last_visited_time;
         this.user2_last_visited_time = user2_last_visited_time;
@@ -156,9 +159,17 @@ public class Friend {
     public void setInterest5(String interest5) {
         this.interest5 = interest5;
     }
+    
 
+    public String getToken() {
+		return token;
+	}
 
-    public String getFriend() {
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getFriend() {
         return friend;
     }
 

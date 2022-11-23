@@ -7,17 +7,34 @@ package com.ssafy.guffy.model.model;
  *
  */
 public class ChatFriend {
-    private String friend_id;
-    private String chat_id;
-    public ChatFriend(String friend_id, String chat_id) {
+    private Integer friend_id;
+    private Integer chat_id;
+    private Integer deleted;
+    
+    public ChatFriend(Integer friend_id, Integer chat_id) {
         super();
         this.friend_id = friend_id;
         this.chat_id = chat_id;
+        this.deleted = 0;
     }
-    public String getFriend_id() {
+    
+    public ChatFriend(Integer friend_id, Integer chat_id, Integer deleted) {
+        super();
+        this.friend_id = friend_id;
+        this.chat_id = chat_id;
+        this.deleted = deleted;
+    }
+    public Integer getFriend_id() {
         return friend_id;
     }
-    public String getChat_id() {
+    public Integer getChat_id() {
         return chat_id;
     }
+	public Integer getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+    
 }
