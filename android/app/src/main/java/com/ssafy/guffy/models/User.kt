@@ -11,5 +11,6 @@ data class User(
     val interest5: String,
     val mbti: String,
     val nickname: String,
-    val pw: String
+    val pw: String,
+    val token:String,
 )
