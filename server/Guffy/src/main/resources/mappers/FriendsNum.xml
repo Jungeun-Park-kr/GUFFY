@@ -32,5 +32,8 @@
 		insert into friends_num(user_id, friends_num)
 		values(#{user_id}, 0)
 	</insert>
+	
+	<update id="updateAll">
+	</update>
 
 </mapper>
