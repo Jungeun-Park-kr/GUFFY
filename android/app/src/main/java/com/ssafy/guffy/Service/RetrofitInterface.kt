@@ -10,7 +10,7 @@ interface RetrofitInterface {
 
     // @GET( EndPoint-자원위치(URI) )
     @GET("/user/friend/friendsIds")
-    fun getFriendIdList(@Query("email") email: String): Call<List<FriendListItem>>
+    suspend fun getFriendIdList(@Query("email") email: String): List<FriendListItem>
 
     @GET("/user")
     suspend fun getUser(@Query("email") email : String):User
