@@ -1,20 +1,10 @@
 package com.ssafy.guffy.controller.rest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,17 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.guffy.model.model.ChatFriend;
 import com.ssafy.guffy.model.model.Friend;
-import com.ssafy.guffy.model.model.Nickname;
 import com.ssafy.guffy.model.model.User;
+import com.ssafy.guffy.model.service.FriendsNumService;
 import com.ssafy.guffy.model.service.UserService;
-import com.ssafy.guffy.util.service.MailService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -51,6 +36,9 @@ public class UserController {
     
     @Autowired
     private PasswordEncoder pwEncoder;
+    
+    @Autowired
+    private FriendsNumService friendsNumService;
     
 
     @GetMapping("/isUsed")
@@ -96,13 +84,16 @@ public class UserController {
     @PostMapping("")
     @ApiOperation(value = "전달받은 사용자를 DB에 추가한다.")
     public String create(@RequestBody User user) {
-    	log.info("user: "+user);
         if (service.select(user.getEmail()) == null) { // DB에 없는 ID여야 함
-            user.setNickname(makeNickName()); // 랜덤 닉네임 생성
         	user.setPw(pwEncoder.encode(user.getPw()));
         	log.info("비밀번호:"+user.getPw());
-            if (service.create(user) == 1)
-                return "success";
+        	
+            if (service.create(user) == 1) {
+            	user = service.select(user.getEmail());
+            	friendsNumService.create(user.getId().toString());
+            	return "success";
+            }
+                
         }
         return "fail";
     }
@@ -148,62 +139,6 @@ public class UserController {
     public Friend friend(@RequestParam int friend_id) {
         return service.friend(friend_id);
     }
-    
-    @GetMapping("/name")
-    public String makeNickName() {
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        String url = "https://nickname.hwanmoo.kr/?format=json";
-        String jsonInString = "";
-        String newName = "";
-        //ResponseEntity<Nickname> response = restTemplate.getForEntity(fooResourceUrl + "/1", Nickname.class);
-        //Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
-        
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            
-            
-            HttpHeaders header = new HttpHeaders();
-            HttpEntity<?> entity = new HttpEntity<>(header);
-            
-            ResponseEntity<Nickname> resultMap = restTemplate.exchange(url, HttpMethod.GET, entity, Nickname.class);
-            
-            result.put("statusCode", resultMap.getStatusCodeValue()); //http status code를 확인
-            result.put("header", resultMap.getHeaders()); //헤더 정보 확인
-            result.put("body", resultMap.getBody()); //실제 데이터 정보 확인
-        
-            //데이터를 제대로 전달 받았는지 확인 string형태로 파싱해줌
-            ObjectMapper mapper = new ObjectMapper();
-            
-            
-            jsonInString = mapper.writeValueAsString(resultMap.getBody());
-            
-            log.info("mapper:"+jsonInString);
-            
-            Nickname jsonToNickname = mapper.readValue(jsonInString, Nickname.class);
-            
-            log.info("jsonToNickname: "+jsonToNickname.getWords().get(0));
-            newName = jsonToNickname.getWords().get(0);
-            
-            return newName;
-            //jsonInString = mapper.writeValueAsString(mnList);
-            
-        }catch (HttpClientErrorException | HttpServerErrorException e) {
-            result.put("statusCode", e.getRawStatusCode());
-            result.put("body"  , e.getStatusText());
-            System.out.println("dfdfdfdf");
-            System.out.println(e.toString());
- 
-        } catch (Exception e) {
-            result.put("statusCode", "999");
-            result.put("body"  , "excpetion오류");
-            System.out.println(e.toString());
-        }
-         log.info("result: " +result);
-         
-        return "fail";
-        
-    }
-
 
     /*
      * @GetMapping("/friend/friendsNum")

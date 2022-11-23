@@ -6,7 +6,7 @@ data class ChattingRoom(
     val user1LastChattingTime: Long,
     val user1LastVisitedTime: Long,
     val user2Id: Int,
-    val user2LastChattingTime: Long,
-    val user2LastVisitedTime: Long,
+    var user2LastChattingTime: Long,
+    var user2LastVisitedTime: Long,
     var deleted:Int,
 )

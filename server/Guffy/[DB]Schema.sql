@@ -50,7 +50,7 @@ insert into friends_num(user_id, friends_num)
 value(1, 1);
 
 insert into friends_num(user_id, friends_num)
-value(2, 2);
+value(2, 1);
 
 
 
