@@ -168,23 +168,10 @@ class MainFragment : Fragment() {
             username = myInfo.nickname
             Log.d(TAG, "내 닉네임: ${myInfo.nickname}")
 
-            val result = retrofitService.getFriendIdList(userEmail).awaitResponse()
-            if(result.body() != null) {
-                friendsIdList = result.body() as MutableList<FriendListItem>
+            val result = retrofitService.getFriendIdList(userEmail)
+            if(!result.isEmpty()) {
+                friendsIdList = result as MutableList<FriendListItem>
                 Log.d(TAG, "friendsIdList: $${friendsIdList}")
-                /*result.enqueue(object:Callback<List<FriendListItem>> {
-                    override fun onResponse(
-                        call: Call<List<FriendListItem>>,
-                        response: Response<List<FriendListItem>>
-                    ) {
-                        val response = response.body() as List<FriendListItem>
-                        Log.d(TAG, "onResponse: response: $response")
-                    }
-    
-                    override fun onFailure(call: Call<List<FriendListItem>>, t: Throwable) {
-                        TODO("Not yet implemented")
-                    }
-                })*/
 
                 for(i in friendsIdList) {
                     if(i.deleted == 1) { // 친구가 날 삭제했음
