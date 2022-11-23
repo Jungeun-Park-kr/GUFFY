@@ -3,10 +3,10 @@ package com.ssafy.guffy.models
 data class ChattingRoom(
     val id: Int,
     val user1Id: Int,
-    val user1LastChattingTime: Int,
-    val user1_last_visited_time: Int,
+    val user1LastChattingTime: Long,
+    val user1LastVisitedTime: Long,
     val user2Id: Int,
-    val user2LastChattingTime: Int,
-    val user2LastVisitedTime: Int,
+    val user2LastChattingTime: Long,
+    val user2LastVisitedTime: Long,
     var deleted:Int,
 )

@@ -20,7 +20,10 @@ import com.ssafy.guffy.ApplicationClass
 import com.ssafy.guffy.Service.RetrofitInterface
 import com.ssafy.guffy.databinding.ActivityChattingBinding
 import com.ssafy.guffy.databinding.ItemChatMessageBinding
+import com.ssafy.guffy.dialog.ConfirmDialog
+import com.ssafy.guffy.dialog.ConfirmNoCancelDialog
 import com.ssafy.guffy.dto.ChattingItemDto
+import com.ssafy.guffy.util.Common
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,6 +56,19 @@ class ChattingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChattingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 인터넷 연결 체크 후 안되어 있다면 앱 종료
+        if(!Common.isNetworkConnected) {
+            Log.d(TAG, "onCreate: 네트워크 연결 없음!!")
+            val dialog = ConfirmNoCancelDialog(object: ConfirmNoCancelDialog.ConfirmNoCancelDialogInterface {
+                override fun onYesButtonClick(id: String) {
+                    finishAndRemoveTask() // 앱 종료
+                }
+            }, "네트워크에 연결상태를 확인해주세요",
+                "서비스를 정상적으로 이용할 수 없어 앱을 종료합니다", "")
+            dialog.isCancelable = false
+            dialog.show(this.supportFragmentManager, "networkUnAvailable")
+        }
 
         // mainFragment에서 넘어온 채팅방 아이디
         chattingRoomId = intent.getIntExtra("chatting_room_id", -1).toString()
