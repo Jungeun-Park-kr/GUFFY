@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.ssafy.guffy.databinding.DialogConfirmBinding
+import com.ssafy.guffy.databinding.DialogConfirmNoCancelBinding
 
 /***
  * 취소, 확인 버튼 있는 다이얼로그
@@ -32,16 +33,16 @@ import com.ssafy.guffy.databinding.DialogConfirmBinding
     }
 
  */
-class ConfirmDialog(
-    confirmDialogInterface: ConfirmDialogInterface,
+class ConfirmNoCancelDialog(
+    confirmDialogInterface: ConfirmNoCancelDialogInterface,
     title: String, message:String, id: String
 ) : DialogFragment() {
 
     // 뷰 바인딩 정의
-    private var _binding: DialogConfirmBinding? = null
+    private var _binding: DialogConfirmNoCancelBinding? = null
     private val binding get() = _binding!!
 
-    private var confirmDialogInterface: ConfirmDialogInterface? = null
+    private var confirmDialogInterface: ConfirmNoCancelDialogInterface? = null
 
     private var id: String? = null
     private var title: String? = null
@@ -59,23 +60,17 @@ class ConfirmDialog(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = DialogConfirmBinding.inflate(inflater, container, false)
+        _binding = DialogConfirmNoCancelBinding.inflate(inflater, container, false)
         val view = binding.root
 
         // 레이아웃 배경을 투명하게 해줌, 필수 아님
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.confirmTitleTv.text = title
-        binding.confirmMessageTv.text = message
-
-
-        // 취소 버튼 클릭 : 다이얼로그 닫기
-        binding.confirmNoBtn.setOnClickListener {
-            dismiss()
-        }
+        binding.confirmNoCancelTitleTv.text = title
+        binding.confirmNoCancelMessageTv.text = message
 
         // 확인 버튼 클릭 - 인터페이스 등록 (나중에 호출시 구현필요함)
-        binding.confirmYesBtn.setOnClickListener {
+        binding.confirmNoCancelYesBtn.setOnClickListener {
             this.confirmDialogInterface?.onYesButtonClick(id!!) // 파라미터 필요할 경우 대비해서 생성함 (걍 창 종료만 할거면 아무값이나 넣어도 됨)
             dismiss()
         }
@@ -87,8 +82,8 @@ class ConfirmDialog(
         super.onDestroyView()
         _binding = null
     }
+    interface ConfirmNoCancelDialogInterface {
+        fun onYesButtonClick(id: String) // 확인 버튼 클릭을 처리해줄 인터페이스 (호출한 곳에서 나중에 구현해줘야 합니다!)
+    }
 }
 
-interface ConfirmDialogInterface {
-    fun onYesButtonClick(id: String) // 확인 버튼 클릭을 처리해줄 인터페이스 (호출한 곳에서 나중에 구현해줘야 합니다!)
-}

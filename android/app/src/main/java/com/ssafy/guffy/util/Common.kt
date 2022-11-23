@@ -1,11 +1,8 @@
 package com.ssafy.guffy.util
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.ssafy.guffy.dialog.AlertDialog
 import com.ssafy.guffy.dialog.AlertWithMessageDialog
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class Common {
 
@@ -39,13 +36,9 @@ class Common {
 
         }
 
-        /*var retrofit:Retrofit = Retrofit.Builder()
-            .baseUrl("http://guffy.ssaverytime.kr:9999/swagger-ui.html")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        // Global variable used to store network state
+        var isNetworkConnected = false
 
-        var retrofitService = retrofit.create(RetrofitService::class.java)
-*/
     }
 
 
