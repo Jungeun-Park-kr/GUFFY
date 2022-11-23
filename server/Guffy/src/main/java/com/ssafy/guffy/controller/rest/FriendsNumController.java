@@ -42,7 +42,7 @@ public class FriendsNumController {
 	@ApiOperation("parameter로 전달된 id를 가진 친구 수 정보를 반환한다.")
 	public FriendsNum select(@RequestParam String user_id) {
 		// 가져오기 전에 모든 사람 친구 수 업데이트
-		service.updateAll();
+		// service.updateAll(); // 구현하기) FriendsNum.xml도 비어있음
 		
 		return service.select(user_id);
 	}

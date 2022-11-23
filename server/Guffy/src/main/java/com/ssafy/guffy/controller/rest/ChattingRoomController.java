@@ -94,7 +94,7 @@ public class ChattingRoomController {
 			firstConnect = true;
 			dontConnectMyself = true;
 			
-			if (newOne.getId().toString().equals(user_id)) { // 자기자신과 연결하지말것
+			if (newOne.getUserId().toString().equals(user_id)) { // 자기자신과 연결하지말것
 				dontConnectMyself = false;
 				log.info("나랑 똑같아요");
 			}
