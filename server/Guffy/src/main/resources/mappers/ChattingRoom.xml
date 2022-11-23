@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ssafy.guffy.model.mapper.ChattingRoomMapper">
+
+	<sql id="chatColumns">
+		id, user1_id, user2_id, user1_last_visited_time,
+		user2_last_visited_time, user1_last_chatting_time,
+		user2_last_chatting_time, deleted
+	</sql>
+
+
+	<select id="select" parameterType="string" resultType="ChattingRoom">
+		select
+		<include refid="chatColumns" />
+		from chatting_room
+		where id = #{id}
+	</select>
+
+	<delete id="delete" parameterType="string">
+		delete from
+		chatting_room
+		where
+		id= #{id}
+	</delete>
+
+	<insert id="create" parameterType="ChattingRoom">
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			 SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into chatting_room(
+			user1_id, user2_id, user1_last_visited_time,
+			user2_last_visited_time, user1_last_chatting_time,
+			user2_last_chatting_time
+		)
+		values (#{user1_id}, #{user2_id}, #{user1_last_visited_time},
+		#{user2_last_visited_time},
+		#{user1_last_chatting_time},
+		#{user2_last_chatting_time})
+	</insert>
+
+	<select id="isUsed" parameterType="string" resultType="Integer">
+		select count(*)
+		from chatting_room
+		where id=#{id}
+	</select>
+
+	<select id="getMyFriends" parameterType="string"
+		resultType="ChatFriend">
+		select user2_id, id
+		from chatting_room c
+		where c.user1_id = #{id}
+		union
+		select user1_id, id
+		from chatting_room c
+		where c.user2_id = #{id}
+	</select>
+
+	<update id="update" parameterType="ChattingRoom">
+		update chatting_room
+		set
+		user1_id = #{user1_id}, user2_id = #{user2_id},
+		user1_last_visited_time = #{user1_last_visited_time},
+		user2_last_visited_time = #{user2_last_visited_time},
+		user1_last_chatting_time = #{user1_last_chatting_time},
+		user2_last_chatting_time = #{user2_last_chatting_time},
+		deleted = #{deleted}
+		where id= #{id}
+	</update>
+
+</mapper>

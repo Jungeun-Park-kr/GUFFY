@@ -39,7 +39,6 @@ class LoginFragment : Fragment() {
                 .replace(R.id.login_frame_container, JoinFragment())
                 .addToBackStack(null)
                 .commit()
-
         }
 
         binding.loginFindPwBtn.setOnClickListener {

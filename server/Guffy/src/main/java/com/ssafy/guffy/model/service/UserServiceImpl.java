@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.guffy.model.mapper.UserMapper;
+import com.ssafy.guffy.model.model.ChatFriend;
+import com.ssafy.guffy.model.model.Friend;
+import com.ssafy.guffy.model.model.MeAndFriend;
 import com.ssafy.guffy.model.model.User;
 
 @Service
@@ -43,5 +46,25 @@ public class UserServiceImpl implements UserService {
     public int isUsed(String email) {
         return mapper.isUsed(email);
     }
+
+    @Override
+    public List<ChatFriend> friends(String email) {
+        return mapper.friends(email);
+    }
+
+    @Override
+    public Friend friend(MeAndFriend meAndFriend) {
+        return mapper.friend(meAndFriend);
+    }
+
+	@Override
+	public User login(User user) {
+		return mapper.login(user);
+	}
+
+	@Override
+	public int isUsedName(String name) {
+		return mapper.isUsedName(name);
+	}
 
 }

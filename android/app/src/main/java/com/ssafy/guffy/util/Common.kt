@@ -1,6 +1,5 @@
 package com.ssafy.guffy.util
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.ssafy.guffy.dialog.AlertDialog
 import com.ssafy.guffy.dialog.AlertWithMessageDialog
@@ -36,6 +35,10 @@ class Common {
             dialog.show(context.supportFragmentManager, tag)
 
         }
+
+        // Global variable used to store network state
+        var isNetworkConnected = false
+
     }
 
 
