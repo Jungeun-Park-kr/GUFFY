@@ -4,7 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.ApplicationClass.Companion.editor
 import com.ssafy.guffy.ApplicationClass.Companion.sharedPreferences
 import com.ssafy.guffy.dialog.ConfirmDialog
 import com.ssafy.guffy.dialog.ConfirmDialogInterface
@@ -21,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val TAG = "MainActivity_구피"
+private const val TAG = "MainActivity_구피1"
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,6 @@ class MainActivity : AppCompatActivity() {
             // 첫 시작은 메인 화면
             openFragment(1)
         }
-        
     }
 
 
@@ -64,19 +66,19 @@ class MainActivity : AppCompatActivity() {
 
     fun logout(){
         // 여기 로그아웃 로직 구현 (ex. preference 지우기)
-        sharedPreferences.edit().clear()
-        sharedPreferences.edit().apply()
-        sharedPreferences.edit().commit()
+        Log.d(TAG, "logout: 삭제 전 autoLogin = ${sharedPreferences.getBoolean("autoLogin",false)}")
+        sharedPreferences.edit {
+            remove("autoLogin")
+            apply()
+        }
 
         Log.d(TAG, "logout: 로그아웃 성공")
-        Log.d(TAG, "logout: email =  ${sharedPreferences.getString("email", "").toString()}")
-        Log.d(TAG, "logout: id = ${sharedPreferences.getString("id", "").toString()}")
-        Log.d(TAG, "logout: nickname = ${sharedPreferences.getString("nickname", "").toString()}")
+        Log.d(TAG, "logout: 삭제 후 autoLogin = ${sharedPreferences.getBoolean("autoLogin", false)}")
 
         //화면이동
         val intent = Intent(this, LoginActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         startActivity(intent)
     }

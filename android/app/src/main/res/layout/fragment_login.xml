@@ -10,9 +10,9 @@
         android:id="@+id/logo"
         android:layout_width="250dp"
         android:layout_height="200dp"
+        android:layout_marginTop="50dp"
         android:scaleType="fitCenter"
         android:src="@drawable/logo_white"
-        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,6 +32,8 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo"></com.google.android.material.textview.MaterialTextView>
+
+
 
     <!--  아이디 editText -->
     <com.google.android.material.textfield.TextInputLayout
@@ -84,32 +86,60 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
         android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
         android:text="login"
         app:cornerRadius="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/login_findPwBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </com.google.android.material.button.MaterialButton>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/login_state_signed_in_check_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_outline_check_circle_outline_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_pw_tvlayout">
 
-    </com.google.android.material.button.MaterialButton>
+
+    </androidx.appcompat.widget.AppCompatImageButton>
+
+    <TextView
+        android:id="@+id/login_state_signed_in_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="로그인 상태 유지"
+        android:textSize="16dp"
+        app:layout_constraintStart_toEndOf="@+id/login_state_signed_in_check_btn"
+        app:layout_constraintTop_toBottomOf="@+id/login_pw_tvlayout"></TextView>
+
 
     <!-- 회원가입   -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_findPwBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="16dp"
         android:background="#00ff0000"
         android:text="비밀번호 찾기"
         android:textSize="15sp"
-        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/login_developer"
         app:layout_constraintEnd_toStartOf="@+id/login_joinBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_loginbtn">
+        app:layout_constraintStart_toStartOf="parent">
 
     </androidx.appcompat.widget.AppCompatButton>
 
@@ -117,14 +147,14 @@
         android:id="@+id/login_joinBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"
         android:background="#00ff0000"
         android:text="회원가입"
         android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/login_developer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/login_findPwBtn"
-        app:layout_constraintTop_toBottomOf="@+id/login_loginbtn">
+        app:layout_constraintStart_toEndOf="@+id/login_findPwBtn">
 
     </androidx.appcompat.widget.AppCompatButton>
 

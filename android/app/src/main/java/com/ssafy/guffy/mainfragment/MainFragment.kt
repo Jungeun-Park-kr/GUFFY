@@ -34,9 +34,11 @@ import com.ssafy.guffy.dto.FriendItemDto
 import com.ssafy.guffy.models.ChattingRoom
 import com.ssafy.guffy.models.FriendListItem
 import com.ssafy.guffy.models.User
+import com.ssafy.guffy.util.Common.Companion.helloList
 import com.ssafy.guffy.util.Common.Companion.showAlertWithMessageDialog
 import kotlinx.coroutines.*
 import retrofit2.awaitResponse
+import kotlin.random.Random
 
 private const val TAG = "MainFragment_구피"
 
@@ -52,7 +54,7 @@ class MainFragment : Fragment() {
     private var userName: String = ""
     private var userId: Int = -1
     private var userEmail: String = ""
-    private var myInterestFilled = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,7 +114,8 @@ class MainFragment : Fragment() {
         initFriendsData()
 
         // 내 닉네임 보여주기
-        binding.userNameTv.text = userName
+        binding.mainHelloTv.text = helloList[Random.nextInt(6)]
+        binding.mainUserNameTv.text = userName
         binding.mainHelloTv.visibility = View.VISIBLE // 안녕하세요! 글씨 보이기
 
         // 설정 버튼 추가
@@ -124,14 +127,14 @@ class MainFragment : Fragment() {
         binding.mainFriendAddBtn.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 val result = retrofitChatroomService.getFriendsNum(userId)
-                Log.d(TAG, "onViewCreated: 나의 친구 수: $result")
+//                Log.d(TAG, "onViewCreated: 나의 친구 수: $result")
 
                 if (result.friendsNum < 3) { // 친구 3명 미만
                     mainActivity.showFindingFriendDialog()
                     // 여기서 친구 추가 작업 해주기
                     val retrofit = wRetrofit.create(RetrofitChatroomService::class.java)
                     val newFriendChat = retrofit.createChattingRoom(userId)
-                    Log.d(TAG, "onViewCreated: 새로생긴 채팅룸id: ${newFriendChat.chat_id}")
+//                    Log.d(TAG, "onViewCreated: 새로생긴 채팅룸id: ${newFriendChat.chat_id}")
                     if (newFriendChat.chat_id > 0) {
 
                         // 리스트에 새 친구 담기
@@ -200,7 +203,7 @@ class MainFragment : Fragment() {
             val user =
                 retrofitUserService.getUser(userEmail).awaitResponse().body() as User
 
-            Log.d(TAG, "이메일로 검색한 user 정보: ${user}")
+//            Log.d(TAG, "이메일로 검색한 user 정보: ${user}")
             myInterestList.add(user.interest1)
             myInterestList.add(user.interest2)
             myInterestList.add(user.interest3)
@@ -224,7 +227,7 @@ class MainFragment : Fragment() {
                 // chip group 에 해당 chip 추가
                 binding.mainChipGroup.addView(chip)
             }
-            Log.d(TAG, "내 관심사 받아오기: ${myInterestList}")
+//            Log.d(TAG, "내 관심사 받아오기: ${myInterestList}")
         }
     }
 
