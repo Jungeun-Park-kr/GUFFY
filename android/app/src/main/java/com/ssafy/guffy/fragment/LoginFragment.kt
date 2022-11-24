@@ -1,16 +1,31 @@
 package com.ssafy.guffy.fragment
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.content.edit
+import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
+import com.ssafy.guffy.ApplicationClass.Companion.sharedPreferences
 import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.databinding.FragmentLoginBinding
+import com.ssafy.guffy.dialog.ConfirmNoCancelDialog
+import com.ssafy.guffy.models.User
+import com.ssafy.guffy.util.Common
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.awaitResponse
 
+private const val TAG = "LoginFragment 구피1"
 private lateinit var binding : FragmentLoginBinding
 class LoginFragment : Fragment() {
 
@@ -32,6 +47,14 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.loginStateSignedInCheckBtn.setOnClickListener {
+            if(binding.loginStateSignedInCheckBtn.imageTintList == ContextCompat.getColorStateList(loginActivity, R.color.dark_grey)){
+                binding.loginStateSignedInCheckBtn.imageTintList = ContextCompat.getColorStateList(loginActivity, R.color.green)
+            }else{
+                binding.loginStateSignedInCheckBtn.imageTintList = ContextCompat.getColorStateList(loginActivity, R.color.dark_grey)
+            }
+        }
+
 
         binding.loginJoinBtn.setOnClickListener{
             requireActivity().supportFragmentManager
@@ -39,7 +62,6 @@ class LoginFragment : Fragment() {
                 .replace(R.id.login_frame_container, JoinFragment())
                 .addToBackStack(null)
                 .commit()
-
         }
 
         binding.loginFindPwBtn.setOnClickListener {
@@ -50,11 +72,81 @@ class LoginFragment : Fragment() {
                 .commit()
         }
 
-        binding.loginLoginbtn.setOnClickListener {
-            // 메인으로 가는
-            startActivity(Intent(requireActivity(), MainActivity::class.java))
-            loginActivity.finish() // 로그인 액티비티 종료
-        }
 
+        binding.loginLoginbtn.setOnClickListener {
+            val email = binding.joinEmailEditText.text.toString().trim()
+            val pw = binding.loginPwEditText.text.toString()
+
+            if (email.isNotEmpty() && pw.isNotEmpty()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    var user = User(email, pw)
+                    var result = retrofitUserService.getLoginResult(user).awaitResponse().body()
+                    if (result == null) { // 로그인 실패
+                        Log.d(TAG, "로그인 실패")
+                        Common.showAlertDialog(
+                            loginActivity,
+                            "로그인 실패했습니다",
+                            ""
+                        )
+                    } else {  // 로그인 성공
+                        Log.d(TAG, "받아온 user = ${result}")
+                        ApplicationClass.editor.putString("nickname", result.nickname)
+                        ApplicationClass.editor.putString("email", result.email)
+
+                        ApplicationClass.editor.apply()
+                        ApplicationClass.editor.commit()
+
+                        Log.d(TAG, "sharedPreference에 저장된 값 불러오기")
+                        Log.d(TAG, "nickname : ${sharedPreferences.getString("nickname", "").toString()}")
+                        Log.d(TAG, "email : ${sharedPreferences.getString("email", "").toString()}")
+
+                        val user = retrofitUserService.getUser(result.email).awaitResponse().body() as User
+
+                        Log.d(TAG, "사용자 불러옵니다: $user")
+
+                        ApplicationClass.editor.putString("id", user.id.toString())
+                        ApplicationClass.editor.apply()
+                        ApplicationClass.editor.commit()
+
+                        Log.d(TAG, "sh) 사용자 id : ${sharedPreferences.getString("id", "")}")
+
+                        // 자동로그인 설정한 경우. sharedPreference에 autoLogin true로 저장
+                        if (binding.loginStateSignedInCheckBtn.imageTintList == ContextCompat.getColorStateList(loginActivity, R.color.green)){
+                            sharedPreferences.edit {
+                                putBoolean("autoLogin", true)
+                                apply()
+                            }
+
+                            Log.d(TAG, "sh) 사용자 autoLogin : ${sharedPreferences.getBoolean("autoLogin", false)}")
+                        }
+                        // 여기에서 토큰 생성해서 서버에 토큰 쏴주기
+
+                        val dialog = ConfirmNoCancelDialog(object: ConfirmNoCancelDialog.ConfirmNoCancelDialogInterface {
+                            override fun onYesButtonClick(id: String) {
+                                // 로그인 성공 후 확인 버튼 누를시 로그인 액티비티로 이동 및 로그인 화면 종료
+                                startActivity(Intent(requireActivity(), MainActivity::class.java))
+                                loginActivity.finish()
+                            }
+                        }, "로그인을 성공했습니다",
+                            "", "")
+                        dialog.isCancelable = false
+                        dialog.show(loginActivity.supportFragmentManager, "networkUnAvailable")
+
+                    }
+                }
+            } else if (email.isEmpty()) {
+                Common.showAlertDialog(
+                    loginActivity,
+                    "아이디를 입력해주세요",
+                    ""
+                )
+            } else if (pw.isEmpty()) {
+                Common.showAlertDialog(
+                    loginActivity,
+                    "비밀번호를 입력해주세요",
+                    ""
+                )
+            }
+        }
     }
 }

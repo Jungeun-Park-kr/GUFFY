@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "983601756700",
+    "firebase_url": "https://guffy-3fc4d-default-rtdb.firebaseio.com",
+    "project_id": "guffy-3fc4d",
+    "storage_bucket": "guffy-3fc4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983601756700:android:8eeb464e5f937377683dd9",
+        "android_client_info": {
+          "package_name": "com.ssafy.guffy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983601756700-v13uprhcf3abh1fd4trhjjo1pce8bqp7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBftBPuXqmOf1_30D8nnemIDP8SAOi4azY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983601756700-v13uprhcf3abh1fd4trhjjo1pce8bqp7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
