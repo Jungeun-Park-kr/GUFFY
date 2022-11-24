@@ -32,9 +32,7 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/orange" />
-        <!--        <meta-data-->
-        <!--            android:name="com.google.firebase.messaging.default_notification_channel_id"-->
-        <!--            android:value="@string/default_notification_channel_id" />-->
+
         <activity
             android:name=".activity.ChattingActivity"
             android:screenOrientation="portrait"

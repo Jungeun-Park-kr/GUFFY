@@ -10,17 +10,19 @@ import com.ssafy.guffy.Service.RetrofitChatroomService
 import com.ssafy.guffy.Service.RetrofitFcmService
 import com.ssafy.guffy.Service.RetrofitUserService
 import com.ssafy.guffy.util.CheckNetwork
+import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
+import java.util.concurrent.TimeUnit
 
 // 앱이 실행될 때 1번만 실행이 됨
 class ApplicationClass : Application() {
 
-    //    val SERVER_URL = "http://guffy.ssaverytime.kr:9999"
-    val SERVER_URL = "http://192.168.100.141:9999"
+//   val SERVER_URL = "http://13.209.221.225:9999"
+    val SERVER_URL = "http://192.168.80.193:9999"
 
     companion object {
         // 전역변수 문법을 통해 Retrofit 인스턴스를 앱 실행 시 1번만 생성하여 사용 (싱글톤 객체)
@@ -45,11 +47,18 @@ class ApplicationClass : Application() {
         val gson: Gson = GsonBuilder()
             .setLenient()
             .create()
+
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .build()
         // 앱이 처음 생성되는 순간, retrofit 인스턴스를 생성
         wRetrofit = Retrofit.Builder()
             .baseUrl(SERVER_URL)
             .addConverterFactory(nullOnEmptyConverterFactory)
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
             .build()
         retrofitUserService = wRetrofit.create(RetrofitUserService::class.java)
         retrofitChatroomService = wRetrofit.create(RetrofitChatroomService::class.java)

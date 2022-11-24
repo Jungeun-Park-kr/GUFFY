@@ -1,6 +1,7 @@
 package com.ssafy.guffy.mainfragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -107,11 +108,18 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initUserData()
         initFriendsData()
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            mainActivity.recreate()
+            adapter.notifyDataSetChanged()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
 
         // 내 닉네임 보여주기
         binding.mainHelloTv.text = helloList[Random.nextInt(6)]
@@ -200,6 +208,8 @@ class MainFragment : Fragment() {
 
         // 1. 내 관심사 가져오기
         CoroutineScope(Dispatchers.Main).launch {
+            myInterestList = mutableListOf()
+            binding.mainChipGroup.removeAllViews()
             val user =
                 retrofitUserService.getUser(userEmail).awaitResponse().body() as User
 
@@ -213,11 +223,10 @@ class MainFragment : Fragment() {
             if (user.interest5.isNotEmpty()) {
                 myInterestList.add(user.interest5)
             }
-
             // 내 관심사 보여주기
             for (i in myInterestList.indices) {
                 // Chip 인스턴스 생성
-                var chip = Chip(requireContext())
+                var chip = Chip(mainActivity)
                 chip.isCheckable = false
                 // 칩 고유 아이디 생성
                 chip.id = i
@@ -342,6 +351,7 @@ class MainFragment : Fragment() {
                                     chattingRoom.deleted = 1 // 삭제된 채팅방임을 표시하기
                                     retrofitChatroomService.updateChattingRoom(chattingRoom) // 채팅창 id 상태 업데이트
                                 }
+                                delay(100)
                                 launch(Dispatchers.Main) { // 그리고 리스트, Adapter에서 삭제하기
                                     friendList.removeAt(position)
                                     adapter.notifyItemRemoved(position)
