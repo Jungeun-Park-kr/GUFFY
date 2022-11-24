@@ -40,6 +40,13 @@
         where email = #{email}
     </select>
     
+    <select id="selectById" parameterType="Integer" resultType="User">
+        select 
+        <include refid="userColumns" />
+        from user
+        where id = #{id}
+    </select>
+    
     <select id="selectAll" parameterType="string" resultType="User">
         select 
         <include refid="userColumns" />

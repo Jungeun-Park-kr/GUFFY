@@ -67,4 +67,9 @@ public class UserServiceImpl implements UserService {
 		return mapper.isUsedName(name);
 	}
 
+	@Override
+	public User selectById(int id) {
+		return mapper.selectById(id);
+	}
+
 }

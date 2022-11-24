@@ -1,5 +1,6 @@
 package com.ssafy.guffy.controller.rest;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,11 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.guffy.fcm.service.FirebaseCloudMessageDataService;
+import com.ssafy.guffy.fcm.service.FirebaseCloudMessageService;
 import com.ssafy.guffy.model.model.ChatFriend;
 import com.ssafy.guffy.model.model.ChattingRoom;
 import com.ssafy.guffy.model.model.FriendsNum;
+import com.ssafy.guffy.model.model.User;
 import com.ssafy.guffy.model.service.ChattingRoomService;
 import com.ssafy.guffy.model.service.FriendsNumService;
+import com.ssafy.guffy.model.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -35,6 +40,12 @@ public class ChattingRoomController {
 
 	@Autowired
 	private FriendsNumService friendsNumService;
+	
+	@Autowired
+	FirebaseCloudMessageDataService tokenService;
+	
+	@Autowired
+	UserService userService;
 
 	@GetMapping("")
 	@ApiOperation(value = "채팅방 아이디로 row를 전체 조회한다.")
@@ -149,6 +160,36 @@ public class ChattingRoomController {
 	@PutMapping("")
 	@ApiOperation("request parameter로 전송된 채팅방 내용으로 채팅방을 업데이트한다.")
 	public int update(@RequestBody ChattingRoom chattingRoom) {
+		
+		// user1 접속시간 < user2 채팅 전송시간 : user2가 채팅 보냄 => user1한테 메시지
+		if(chattingRoom.getuser1LastVisitedTime() < chattingRoom.getUser2LastChattingTime()) {
+			try {
+				log.info("user2가 user1한테 채팅보냄!");
+				User sender = userService.selectById(Integer.parseInt(chattingRoom.getUser2Id()));
+				User target = userService.selectById(Integer.parseInt(chattingRoom.getUser1Id()));
+				
+				tokenService.sendDataMessageTo(target.getToken(), sender.getNickname(), "새로운 메시지가 도착했어요. 확인하려면 앱에 접속하세요!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// user2 접속시간 < user1 채팅 전송시간 : user1가 채팅 보냄
+		else if (chattingRoom.getUser2LastVisitedTime() < chattingRoom.getUser1LastChattingTime()) {
+			log.info("user1이 user2 한테 채팅보냄!");
+			try {
+				User sender = userService.selectById(Integer.parseInt(chattingRoom.getUser1Id()));
+				User target = userService.selectById(Integer.parseInt(chattingRoom.getUser2Id()));
+				tokenService.sendDataMessageTo(sender.getToken(), sender.getNickname() , "새로운 메시지가 도착했어요. 확인하려면 앱에 접속하세요!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		
+		
+		// chattingRoom update
 		return service.update(chattingRoom);
 	}
 
