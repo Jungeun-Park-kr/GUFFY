@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">192.168.80.193</domain>
         <domain includeSubdomains="true">guffy.ssaverytime.kr</domain>
         <domain includeSubdomains="true">172.30.24.121</domain>
         <domain includeSubdomains="true">172.20.10.11</domain>
         <domain includeSubdomains="true">192.168.100.141</domain>
         <domain includeSubdomains="true">192.168.33.120</domain>
+        <domain includeSubdomains="true">13.209.221.225</domain>
+        <domain includeSubdomains="true">192.168.80.193</domain>
+        <domain includeSubdomains="true">192.168.0.18</domain>
+        <domain includeSubdomains="true">192.168.0.20</domain>
+
+<!--        192.168.80.193-->
 
     </domain-config>
 </network-security-config>

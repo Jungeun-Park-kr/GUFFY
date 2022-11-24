@@ -22,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         // 네트워크 연결 상태 확인 후 인터넷 없으면 앱 종료
         if(!Common.isNetworkConnected) {
@@ -35,7 +36,6 @@ class LoginActivity : AppCompatActivity() {
             dialog.isCancelable = false
             dialog.show(this.supportFragmentManager, "networkUnAvailable")
         } else {
-            supportActionBar?.hide()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.login_frame_container, LoginFragment())

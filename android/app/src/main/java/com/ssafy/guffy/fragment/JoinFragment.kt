@@ -376,22 +376,10 @@ class JoinFragment : Fragment() {
                 Log.d(TAG, "onViewCreated: ${user}")
                 // 회원가입 성공 dialog, 다이어로그의 확인버튼 누르면 로그인 액티비티로 넘어감
                 CoroutineScope(Dispatchers.Main).launch {
-                    val result = retrofitUserService.addUser(user).awaitResponse().body() as String
+                    val result = retrofitUserService.addUser(user).awaitResponse().body()
                     Log.d(TAG, "onViewCreated: 회원가입 : $result")
                     if (result == "success") {
-                        val builder = AlertDialog.Builder(requireContext())
-                        builder
-                            .setTitle("회원가입이 완료되었습니다.")
-                            .setPositiveButton("OK") { dialog, which ->
-                                Log.d(TAG, "showDialog: 확인버튼 누름")
-                                requireActivity()
-                                    .supportFragmentManager
-                                    .beginTransaction()
-                                    .replace(R.id.login_frame_container, LoginFragment())
-                                    .commit()
-                            }
-                            .create()
-                            .show()
+                        showAlertDialog(loginActivity, "회원가입이 완료되었습니다.", "joinSucceeded")
                     }
                 }
             }

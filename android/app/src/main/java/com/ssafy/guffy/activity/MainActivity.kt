@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        supportActionBar?.hide()
         // 네트워크 연결 상태 확인 후 인터넷 없으면 앱 종료
         if(!Common.isNetworkConnected) {
             Log.d(TAG, "onCreate: 네트워크 연결 없음!!")
