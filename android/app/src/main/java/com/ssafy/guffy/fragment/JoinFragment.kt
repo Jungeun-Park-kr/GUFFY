@@ -2,6 +2,7 @@ package com.ssafy.guffy.fragment
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +19,7 @@ import com.google.android.material.chip.Chip
 import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.LoginActivity
+import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.databinding.FragmentJoinBinding
 import com.ssafy.guffy.models.User
 import com.ssafy.guffy.util.Common.Companion.emailRegex
@@ -380,6 +382,10 @@ class JoinFragment : Fragment() {
                     Log.d(TAG, "onViewCreated: 회원가입 : $result")
                     if (result == "success") {
                         showAlertDialog(loginActivity, "회원가입이 완료되었습니다.", "joinSucceeded")
+                        requireActivity().supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.login_frame_container, LoginFragment())
+                            .commit()
                     }
                 }
             }

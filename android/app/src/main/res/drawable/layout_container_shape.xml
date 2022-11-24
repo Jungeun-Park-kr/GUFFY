@@ -4,8 +4,8 @@
 
 <!--    // The width and color of the border-->
     <stroke
-        android:width="4dp"
-        android:color="@color/dark_grey" />
+        android:width="1dp"
+        android:color="@color/orange" />
 
 <!--    // The corner radius, reduce it to make it more square-->
     <corners android:radius="15dp"/>

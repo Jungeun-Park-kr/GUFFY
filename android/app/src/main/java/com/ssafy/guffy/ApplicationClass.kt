@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit
 // 앱이 실행될 때 1번만 실행이 됨
 class ApplicationClass : Application() {
 
-//   val SERVER_URL = "http://13.209.221.225:9999"
-    val SERVER_URL = "http://192.168.80.193:9999"
+   val SERVER_URL = "http://13.209.221.225:9999"
+//    val SERVER_URL = "http://192.168.29.149:9999"
 
     companion object {
         // 전역변수 문법을 통해 Retrofit 인스턴스를 앱 실행 시 1번만 생성하여 사용 (싱글톤 객체)
