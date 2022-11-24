@@ -104,6 +104,7 @@ class LoginFragment : Fragment() {
 
 
 
+
                         val dialog = ConfirmNoCancelDialog(object: ConfirmNoCancelDialog.ConfirmNoCancelDialogInterface {
                             override fun onYesButtonClick(id: String) {
                                 // 로그인 성공 후 확인 버튼 누를시 로그인 액티비티로 이동 및 로그인 화면 종료

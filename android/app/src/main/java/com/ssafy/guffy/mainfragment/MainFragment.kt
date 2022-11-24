@@ -227,10 +227,7 @@ class MainFragment : Fragment() {
             }
             Log.d(TAG, "내 관심사 받아오기: ${myInterestList}")
         }
-
-
     }
-
 
     // 최근 연락 목록
     private fun initFriendsData() {
