@@ -52,26 +52,24 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
             messageContent = data.get("body").toString()
         }
 
-        val mainIntent:Intent
         // TODO : 로그인 유무에 따라 noti 타고 들어왔을때 보이는 화면을 다르게 하기
-        /*if(자동 로그인 되어있는경우에만 알림 보내기) { // 메인 화면으로
+        val isLogined = ApplicationClass.sharedPreferences.getBoolean("autoLogin", false)
+        if(isLogined) { // 메인 화면으로
+            val mainIntent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            val mainPendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        } */
-        mainIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+            val builder1 = NotificationCompat.Builder(this, channel_id)
+                .setSmallIcon(R.drawable.ic_guffy_launcher_round)
+                .setContentTitle(messageTitle)
+                .setContentText(messageContent)
+                .setAutoCancel(true)
+                .setContentIntent(mainPendingIntent)
 
-        val mainPendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
-
-        val builder1 = NotificationCompat.Builder(this, channel_id)
-            .setSmallIcon(R.drawable.ic_guffy_launcher_round)
-            .setContentTitle(messageTitle)
-            .setContentText(messageContent)
-            .setAutoCancel(true)
-            .setContentIntent(mainPendingIntent)
-
-        NotificationManagerCompat.from(this).apply {
-            notify(101, builder1.build())
+            NotificationManagerCompat.from(this).apply {
+                notify(101, builder1.build())
+            }
         }
     }
 

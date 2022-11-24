@@ -7,8 +7,7 @@
     tools:context=".mainfragment.MainFragment"
     android:paddingStart="10dp"
     android:paddingEnd="10dp"
-    android:paddingTop="20dp"
-    >
+    android:paddingTop="20dp" >
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/main_hello_tv"

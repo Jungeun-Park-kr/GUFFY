@@ -170,32 +170,32 @@ public class ChattingRoomController {
 	@ApiOperation("request parameter로 전송된 채팅방 내용으로 채팅방을 업데이트한다.")
 	public int update(@RequestBody ChattingRoom chattingRoom) {
 		
-		// user1 접속시간 < user2 채팅 전송시간 : user2가 채팅 보냄 => user1한테 메시지
-		if(chattingRoom.getuser1LastVisitedTime() < chattingRoom.getUser2LastChattingTime()) {
-			try {
-				log.info("user2가 user1한테 채팅보냄!");
-				User sender = userService.selectById(Integer.parseInt(chattingRoom.getUser2Id()));
-				User target = userService.selectById(Integer.parseInt(chattingRoom.getUser1Id()));
-				tokenService.sendDataMessageTo(target.getToken(), sender.getNickname(), "새로운 메시지가 도착했어요! 확인하려면 앱에 접속하세요😉");;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if (chattingRoom.getDeleted() == 0) { // 삭제된 채팅방 아닐때만 메시지 보내기
+			// user1 접속시간 < user2 채팅 전송시간 : user2가 채팅 보냄 => user1한테 메시지
+			if(chattingRoom.getuser1LastVisitedTime() < chattingRoom.getUser2LastChattingTime()) {
+				try {
+					log.info("user2가 user1한테 채팅보냄!");
+					User sender = userService.selectById(Integer.parseInt(chattingRoom.getUser2Id()));
+					User target = userService.selectById(Integer.parseInt(chattingRoom.getUser1Id()));
+					tokenService.sendDataMessageTo(target.getToken(), sender.getNickname(), "새로운 메시지가 도착했어요! 확인하려면 앱에 접속하세요😉");;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			// user2 접속시간 < user1 채팅 전송시간 : user1가 채팅 보냄
+			else if (chattingRoom.getUser2LastVisitedTime() < chattingRoom.getUser1LastChattingTime()) {
+				log.info("user1이 user2 한테 채팅보냄!");
+				try {
+					User sender = userService.selectById(Integer.parseInt(chattingRoom.getUser1Id()));
+					User target = userService.selectById(Integer.parseInt(chattingRoom.getUser2Id()));
+					tokenService.sendDataMessageTo(target.getToken(), sender.getNickname() , "새로운 메시지가 도착했어요. 확인하려면 앱에 접속하세요😉");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-		// user2 접속시간 < user1 채팅 전송시간 : user1가 채팅 보냄
-		else if (chattingRoom.getUser2LastVisitedTime() < chattingRoom.getUser1LastChattingTime()) {
-			log.info("user1이 user2 한테 채팅보냄!");
-			try {
-				User sender = userService.selectById(Integer.parseInt(chattingRoom.getUser1Id()));
-				User target = userService.selectById(Integer.parseInt(chattingRoom.getUser2Id()));
-				tokenService.sendDataMessageTo(target.getToken(), sender.getNickname() , "새로운 메시지가 도착했어요. 확인하려면 앱에 접속하세요😉");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-		
 		
 		// chattingRoom update
 		return service.update(chattingRoom);

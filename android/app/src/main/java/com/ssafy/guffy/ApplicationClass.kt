@@ -20,7 +20,7 @@ import java.lang.reflect.Type
 class ApplicationClass : Application() {
 
     //    val SERVER_URL = "http://guffy.ssaverytime.kr:9999"
-    val SERVER_URL = "http://192.168.33.120:9999"
+    val SERVER_URL = "http://192.168.100.141:9999"
 
     companion object {
         // 전역변수 문법을 통해 Retrofit 인스턴스를 앱 실행 시 1번만 생성하여 사용 (싱글톤 객체)
