@@ -12,9 +12,14 @@
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
+<<<<<<< android/app/src/main/AndroidManifest.xml
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_guffy_launcher"
+=======
         android:icon="@mipmap/ic_launcher"
+>>>>>>> android/app/src/main/AndroidManifest.xml
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_guffy_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Guffy"
         android:usesCleartextTraffic="true"

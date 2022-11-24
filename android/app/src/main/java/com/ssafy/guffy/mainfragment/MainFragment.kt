@@ -61,7 +61,6 @@ class MainFragment : Fragment() {
         mainActivity = context as MainActivity
 
         // 알림 권한 확인
-
         userName = ApplicationClass.sharedPreferences.getString("nickname", "").toString()
         userId = ApplicationClass.sharedPreferences.getString("id", "").toString().toInt()
         userEmail = ApplicationClass.sharedPreferences.getString("email", "").toString()

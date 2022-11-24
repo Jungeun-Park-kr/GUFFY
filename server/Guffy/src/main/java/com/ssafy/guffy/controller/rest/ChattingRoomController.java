@@ -146,6 +146,15 @@ public class ChattingRoomController {
 
 		ChattingRoom chattingRoom = new ChattingRoom(user_id, user2Id, 0L, 0L, 0L, 0L);
 		service.create(chattingRoom);
+		
+		// 초대당한 user2에게 FCM 보내기
+		try {
+			User target = userService.selectById(Integer.parseInt(user_id)); // user2Id
+			tokenService.sendDataMessageTo(target.getToken(), "새로운 친구가 나를 발견했어요!", "앱에 접속해서 대화를 시작해보세요 😊 ");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		ChatFriend newChatFriend = new ChatFriend(user2.getUserId(), chattingRoom.getId());
 		return newChatFriend; // 생성된 채팅룸 id 리턴
@@ -167,8 +176,8 @@ public class ChattingRoomController {
 				log.info("user2가 user1한테 채팅보냄!");
 				User sender = userService.selectById(Integer.parseInt(chattingRoom.getUser2Id()));
 				User target = userService.selectById(Integer.parseInt(chattingRoom.getUser1Id()));
-				
-				tokenService.sendDataMessageTo(target.getToken(), sender.getNickname(), "새로운 메시지가 도착했어요. 확인하려면 앱에 접속하세요!");
+
+				tokenService.sendDataMessageTo(target.getToken(), sender.getNickname(), "새로운 메시지가 도착했어요! 확인하려면 앱에 접속하세요😉");;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -180,7 +189,8 @@ public class ChattingRoomController {
 			try {
 				User sender = userService.selectById(Integer.parseInt(chattingRoom.getUser1Id()));
 				User target = userService.selectById(Integer.parseInt(chattingRoom.getUser2Id()));
-				tokenService.sendDataMessageTo(sender.getToken(), sender.getNickname() , "새로운 메시지가 도착했어요. 확인하려면 앱에 접속하세요!");
+				// target으로 바꿔야 함!
+				tokenService.sendDataMessageTo(sender.getToken(), sender.getNickname() , "새로운 메시지가 도착했어요. 확인하려면 앱에 접속하세요😉");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
