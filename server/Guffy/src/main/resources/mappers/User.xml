@@ -20,7 +20,7 @@
     	where email = #{email}
     </select>
     
-    <select id="isUsedName">
+    <select id="isUsedName" parameterType="String" resultType="Integer">
     	select count(*)
     	from user
     	where nickname = #{name}
