@@ -33,7 +33,9 @@
 		values(#{user_id}, 0)
 	</insert>
 	
-	<update id="updateAll">
-	</update>
+	<select id="getAllUser" resultType="FriendsNum">
+		select <include refid="friendsColumns"/>
+		from friends_num
+	</select>
 
 </mapper>

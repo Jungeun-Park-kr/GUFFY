@@ -10,8 +10,9 @@ public class FriendsNum {
     private Integer user_id;
     private Integer friends_num;
         
-    
-    public FriendsNum() {
+   
+
+	public FriendsNum() {
     	super();
     }
 

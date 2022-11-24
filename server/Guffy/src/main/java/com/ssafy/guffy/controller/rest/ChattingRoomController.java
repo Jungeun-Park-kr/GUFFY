@@ -39,7 +39,7 @@ public class ChattingRoomController {
 	@GetMapping("")
 	@ApiOperation(value = "채팅방 아이디로 row를 전체 조회한다.")
 	public ChattingRoom select(@RequestParam String id) {
-		log.info("message: "+service.select(id));
+		log.info("message: " + service.select(id));
 		return service.select(id);
 	}
 
@@ -49,18 +49,28 @@ public class ChattingRoomController {
 		// 채팅방 아이디로 전체 row 찾아오기
 		ChattingRoom chattingRoom = service.select(id);
 
-		// u1 friendsNum 테이블에서 count--
-		FriendsNum u1FriendsNum = friendsNumService.select(chattingRoom.getUser1Id());
-		u1FriendsNum.setFriendsNum(Math.max(u1FriendsNum.getFriendsNum() - 1, 0));
-		friendsNumService.update(u1FriendsNum);
+		// 채팅방 id에 맞도록 삭제후 결과 저장
+		int result = service.delete(id);
 
-		// u2 friendsNum 테이블에서 count--
-		FriendsNum u2FriendsNum = friendsNumService.select(chattingRoom.getUser2Id());
-		u2FriendsNum.setFriendsNum(Math.max(u2FriendsNum.getFriendsNum() - 1, 0));
-		friendsNumService.update(u2FriendsNum);
+		// 친구 수 테이블 업데이트
+		List<FriendsNum> allUser = friendsNumService.getAllUser();
+
+		for (FriendsNum friendsNum : allUser) {
+			String user_id = friendsNum.getUserId().toString(); // 업데이트할 user_id
+
+			// user_id와 연결된 친구 목록 조회
+			List<ChatFriend> friendsList = service.getMyFriends(user_id);
+
+			// user_id에 해당하는 friendsNum 객체에 친구수 업데이트
+			// 친구수는 친구목록의 size로 알수있음
+			friendsNum.setFriendsNum(friendsList.size());
+
+			// 수정한 친구 수 저장
+			friendsNumService.update(friendsNum);
+		}
 
 		// 채팅방 삭제
-		return service.delete(id);
+		return result;
 	}
 
 	@PostMapping("")
@@ -68,32 +78,29 @@ public class ChattingRoomController {
 	public ChatFriend create(@RequestParam String user_id) { // 파라미터에 user1에만 들어있음
 		String user2Id = "";
 		// 새로운 친구 연결
-		log.info("가져왔어요 1 ");
+		log.info("새로운 친구목록 가져왔어요 1 ");
 		List<FriendsNum> newFriendsList = friendsNumService.findNewFriends();
 		log.info("newFriendsList>> ");
 		log.info(newFriendsList.toString() + "\n");
-		
-		
-		log.info("가져왔어요 2 ");
+
+		log.info("나랑 연결된 친구목록 가져왔어요 2 ");
 		List<ChatFriend> myFriendsList = service.getMyFriends(user_id);
 		log.info("myFriendsList>> ");
 		log.info(myFriendsList.toString() + "\n");
-	
-		
+
 		boolean firstConnect = true;
 		boolean dontConnectMyself = true;
 
-	
 		if (newFriendsList.get(0).getFriendsNum() >= 3) { // 오름차순 정렬했는데 0번째 친구가 꽉찬거면 다 꽉찬거임
 			log.warn("여기니?");
 			return new ChatFriend(-1, -1);
 		}
 		for (FriendsNum newOne : newFriendsList) { // 5개(그거보다 작다면 최대 크기만큼) 중에
-			// log.info("새로운 친구 =  " + newOne.getId().toString());
-			
+			// log.info("새로운 친구 = " + newOne.getId().toString());
+
 			firstConnect = true;
 			dontConnectMyself = true;
-			
+
 			if (newOne.getUserId().toString().equals(user_id)) { // 자기자신과 연결하지말것
 				dontConnectMyself = false;
 				log.info("나랑 똑같아요");
@@ -144,5 +151,17 @@ public class ChattingRoomController {
 	public int update(@RequestBody ChattingRoom chattingRoom) {
 		return service.update(chattingRoom);
 	}
+
+	@GetMapping("/getMyFriends")
+	@ApiOperation("id와 연결된 친구목록 전체를 리턴한다. 없다면 null 리턴")
+	public List<ChatFriend> getMyFriends(@RequestParam String id) {
+		return service.getMyFriends(id);
+	}
+//	
+//	@GetMapping("/getMyFriendsCount")
+//	@ApiOperation("id와 연결된 친구목록 전체를 리턴한다. 없다면 null 리턴")
+//	public int getMyFriends(@RequestParam String id) {
+//		return service.getMyFriends(id);
+//	}
 
 }

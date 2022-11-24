@@ -69,5 +69,7 @@
 		deleted = #{deleted}
 		where id= #{id}
 	</update>
+	
+	
 
 </mapper>

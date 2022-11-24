@@ -41,4 +41,9 @@ public class FriendsNumImpl implements FriendsNumService{
 		return mapper.updateAll();
 	}
 
+	@Override
+	public List<FriendsNum> getAllUser() {
+		return mapper.getAllUser();
+	}
+
 }
