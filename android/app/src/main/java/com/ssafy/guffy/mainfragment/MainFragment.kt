@@ -55,7 +55,6 @@ class MainFragment : Fragment() {
     private var userId: Int = -1
     private var userEmail: String = ""
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity = context as MainActivity
