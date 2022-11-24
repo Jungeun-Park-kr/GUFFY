@@ -8,6 +8,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.fragment.LoginFragment
@@ -51,14 +52,19 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
             messageContent = data.get("body").toString()
         }
 
-        val mainIntent = Intent(this, MainActivity::class.java).apply {
+        val mainIntent:Intent
+        // TODO : 로그인 유무에 따라 noti 타고 들어왔을때 보이는 화면을 다르게 하기
+        /*if(자동 로그인 되어있는경우에만 알림 보내기) { // 메인 화면으로
+
+        } */
+        mainIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
         val mainPendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val builder1 = NotificationCompat.Builder(this, channel_id)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(R.drawable.ic_guffy_launcher_round)
             .setContentTitle(messageTitle)
             .setContentText(messageContent)
             .setAutoCancel(true)
