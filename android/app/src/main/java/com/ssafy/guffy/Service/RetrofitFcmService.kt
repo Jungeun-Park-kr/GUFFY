@@ -9,7 +9,7 @@ interface RetrofitFcmService {
 
     // Token정보 서버로 전송
     @POST("/token")
-    fun uploadToken(@Query("token") token: Token): Call<String>
+    fun uploadToken(@Query("token") token: String, @Query("user_id")userId:String): Call<Token>
 
 
 }

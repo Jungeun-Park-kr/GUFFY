@@ -1,9 +1,16 @@
 package com.ssafy.guffy.util
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.ssafy.guffy.ApplicationClass
 import com.ssafy.guffy.dialog.AlertDialog
 import com.ssafy.guffy.dialog.AlertWithMessageDialog
+import com.ssafy.guffy.models.Token
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
+private const val TAG = "Common_구피"
 class Common {
 
     companion object {
@@ -118,6 +125,28 @@ class Common {
         // Global variable used to store network state
         var isNetworkConnected = false
 
+
+        // FCM Channel Id
+        const val channel_id = "guffy_channel"
+
+        // ratrofit  수업 후 network 에 업로드 할 수 있도록 구성
+        fun uploadToken(token:String, userId:String){
+            // 새로운 토큰 수신 시 서버로 전송
+            ApplicationClass.retrofitFcmService.uploadToken(token,userId).enqueue(object :
+                Callback<Token> {
+                override fun onResponse(call: Call<Token>, response: Response<Token>) {
+                    if(response.isSuccessful){
+                        val res = response.body()
+                        Log.d(TAG, "onResponse: $res")
+                    } else {
+                        Log.d(TAG, "onResponse: Error Code ${response.code()}")
+                    }
+                }
+                override fun onFailure(call: Call<Token>, t: Throwable) {
+                    Log.d(TAG, t.message ?: "토큰 정보 등록 중 통신오류")
+                }
+            })
+        }
     }
 
 

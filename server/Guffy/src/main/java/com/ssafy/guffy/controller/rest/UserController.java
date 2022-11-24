@@ -77,6 +77,12 @@ public class UserController {
         return service.select(email);
     }
     
+    @GetMapping("/id")
+    @ApiOperation(value = "해당 id를 가진 사용자 정보를 반환한다.")
+    public User select(@RequestParam int id) {
+        return service.selectById(id);
+    }
+    
     @PostMapping("/login")
     @ApiOperation(value = "사용자의 이메일, 비밀번호가 맞는지 확인 후 맞다면 사용자 정보를 반환한다. 틀리다면 null을 반환한다.")
     public User login(@RequestBody User user) {

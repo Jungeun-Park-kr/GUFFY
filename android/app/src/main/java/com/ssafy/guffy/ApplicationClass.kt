@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.ssafy.guffy.Service.RetrofitChatroomService
+import com.ssafy.guffy.Service.RetrofitFcmService
 import com.ssafy.guffy.Service.RetrofitUserService
 import com.ssafy.guffy.util.CheckNetwork
 import okhttp3.ResponseBody
@@ -21,11 +22,13 @@ class ApplicationClass : Application() {
 //    val SERVER_URL = "http://guffy.ssaverytime.kr:9999"
     val SERVER_URL = "http://192.168.80.193:9999"
 
+
     companion object {
         // 전역변수 문법을 통해 Retrofit 인스턴스를 앱 실행 시 1번만 생성하여 사용 (싱글톤 객체)
         lateinit var wRetrofit : Retrofit
         lateinit var retrofitUserService:RetrofitUserService
         lateinit var retrofitChatroomService: RetrofitChatroomService
+        lateinit var retrofitFcmService: RetrofitFcmService
 
         // 로그인 정보를 담기 위한 sharedPreference
         lateinit var sharedPreferences: SharedPreferences
@@ -58,6 +61,7 @@ class ApplicationClass : Application() {
                 .build()
         retrofitUserService = wRetrofit.create(RetrofitUserService::class.java)
         retrofitChatroomService = wRetrofit.create(RetrofitChatroomService::class.java)
+        retrofitFcmService = wRetrofit.create(RetrofitFcmService::class.java)
 
         // 네트워크에 연결되어있는지 확인 후 없으면 앱 종료 시키기위해 네트워크 연결상태 감지 콜백 생성시켜두기
         val network: CheckNetwork = CheckNetwork(applicationContext)

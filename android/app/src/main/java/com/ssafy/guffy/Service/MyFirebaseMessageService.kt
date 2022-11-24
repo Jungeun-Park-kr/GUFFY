@@ -1,4 +1,4 @@
-package com.ssafy.firebase_2
+package com.ssafy.guffy.Service
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -7,6 +7,16 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.activity.LoginActivity
+import com.ssafy.guffy.activity.MainActivity
+import com.ssafy.guffy.fragment.LoginFragment
+import com.ssafy.guffy.models.Token
+import com.ssafy.guffy.util.Common.Companion.channel_id
+import com.ssafy.guffy.util.Common.Companion.uploadToken
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 private const val TAG = "MyFirebaseMsgSvc_싸피"
 
@@ -16,7 +26,8 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
         super.onNewToken(token)
         Log.d(TAG, "onNewToken: $token")
         // 새로운 토큰 수신 시 서버로 전송
-        //MainActivity.uploadToken(token)
+        val userName = ApplicationClass.sharedPreferences.getString("nickname", "").toString()
+        uploadToken(token, userName)
     }
 
     // Foreground, Background 모두 처리하기 위해서는 data에 값을 담아서 넘긴다.
@@ -40,13 +51,13 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
             messageContent = data.get("body").toString()
         }
 
-        //val mainIntent = Intent(this, MainActivity::class.java).apply {
-        //    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        //}
+        val mainIntent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
 
-        //val mainPendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+        val mainPendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        /*val builder1 = NotificationCompat.Builder(this, MainActivity.channel_id)
+        val builder1 = NotificationCompat.Builder(this, channel_id)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(messageTitle)
             .setContentText(messageContent)
@@ -55,6 +66,7 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
 
         NotificationManagerCompat.from(this).apply {
             notify(101, builder1.build())
-        }*/
+        }
     }
+
 }

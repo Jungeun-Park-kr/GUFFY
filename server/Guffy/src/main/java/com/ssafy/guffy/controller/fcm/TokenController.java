@@ -14,6 +14,8 @@ import com.ssafy.guffy.fcm.dto.FireStoreMessage;
 import com.ssafy.guffy.fcm.service.FirebaseCloudMessageDataService;
 import com.ssafy.guffy.fcm.service.FirebaseCloudMessageService;
 import com.ssafy.guffy.model.model.Token;
+import com.ssafy.guffy.model.model.User;
+import com.ssafy.guffy.model.service.UserService;
 
 @RestController
 @CrossOrigin("*")
@@ -27,11 +29,26 @@ public class TokenController {
     @Autowired
     FirebaseCloudMessageDataService dataService;
     
+    @Autowired
+    UserService userService;
+    
     @PostMapping("/token")
-    public String registToken(Token token) {
-    	logger.info("registToken : token:{}", token);
+    public Token registToken(Token token) {
+    	logger.info("registToken : token:"+ token);
         service.addToken(token.getToken());
-        return "'"+token+"'" ;
+        //return "'"+token+"'" ;
+
+        // 이 user_id 가진 사용자의 토큰 갱신
+        User user = userService.selectById(Integer.parseInt(token.getUser_id()));
+        if (user != null) {
+        	user.setToken(token.getToken());
+            userService.update(user);
+            
+        } else {
+        	logger.warn("user ㅇ벗음...");
+        }
+        
+        return token;
     }
     
     @PostMapping("/broadcast")

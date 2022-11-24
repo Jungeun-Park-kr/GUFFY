@@ -38,7 +38,7 @@ public class FirebaseCloudMessageDataService {
 
     public final ObjectMapper objectMapper;
 
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/test-1c6be/messages:send";
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/guffy-3fc4d/messages:send";
      
     /**
      * FCM에 push 요청을 보낼 때 인증을 위해 Header에 포함시킬 AccessToken 생성

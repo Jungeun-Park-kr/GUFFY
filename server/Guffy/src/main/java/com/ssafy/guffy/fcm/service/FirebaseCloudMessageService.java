@@ -35,7 +35,7 @@ public class FirebaseCloudMessageService {
 
     public final ObjectMapper objectMapper;
 
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/ssafy-homework/messages:send";
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/guffy-3fc4d/messages:send";
      
     /**
      * FCM에 push 요청을 보낼 때 인증을 위해 Header에 포함시킬 AccessToken 생성
@@ -43,8 +43,7 @@ public class FirebaseCloudMessageService {
      * @throws IOException
      */
     private String getAccessToken() throws IOException {
-    	String firebaseConfigPath = "firebase/hw_firebase_service_key.json";
-    	//String firebaseConfigPath = "firebase/firebase_service_key.json";
+    	String firebaseConfigPath = "firebase/firebase_service_key.json";
             
         // GoogleApi를 사용하기 위해 oAuth2를 이용해 인증한 대상을 나타내는객체
         GoogleCredentials googleCredentials = GoogleCredentials
@@ -84,6 +83,7 @@ public class FirebaseCloudMessageService {
      * @throws IOException
      */
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+    	System.out.print("token = " +  targetToken);
         String message = makeMessage(targetToken, title, body);
         logger.info("message : {}", message);
         OkHttpClient client = new OkHttpClient();

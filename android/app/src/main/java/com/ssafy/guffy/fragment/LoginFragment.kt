@@ -1,30 +1,47 @@
 package com.ssafy.guffy.fragment
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.content.getSystemService
+import androidx.fragment.app.Fragment
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.ssafy.guffy.ApplicationClass
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitFcmService
 import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.databinding.FragmentLoginBinding
 import com.ssafy.guffy.dialog.ConfirmNoCancelDialog
+import com.ssafy.guffy.models.Token
 import com.ssafy.guffy.models.User
 import com.ssafy.guffy.util.Common
+import com.ssafy.guffy.util.Common.Companion.channel_id
+import com.ssafy.guffy.util.Common.Companion.uploadToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.awaitResponse
 
 private const val TAG = "LoginFragment 구피"
 private lateinit var binding : FragmentLoginBinding
 class LoginFragment : Fragment() {
 
+    private var user_id = ""
     private lateinit var loginActivity: LoginActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +57,12 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 
         binding.loginJoinBtn.setOnClickListener{
@@ -101,7 +122,14 @@ class LoginFragment : Fragment() {
 
 
                         // 여기에서 토큰 생성해서 서버에 토큰 쏴주기
-
+                        if(user.id > 0) {
+                            Log.d(TAG, "onViewCreated: 로그인 성공 => 토큰 생성 가능!")
+                            user_id = user.id.toString()
+                            createFcmToken()
+                        } else {
+                            Log.d(TAG, "onViewCreated: 로그인 후 유저 id값 이상함 => 토큰 생성 실패...")
+                        }
+                        
 
 
 
@@ -134,5 +162,34 @@ class LoginFragment : Fragment() {
 
         }
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createFcmToken() {
+        // FCM 토큰 수신
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "FCM 토큰 얻기에 실패하였습니다.", task.exception)
+                return@OnCompleteListener
+            }
+            // token log 남기기
+            Log.d(TAG, "createFcmToken: user_id : $user_id")
+            Log.d(TAG, "token: ${task.result?:"task.result is null"}")
+            if(task.result != null){
+                uploadToken(task.result!!, user_id)
+            }
+        })
+        createNotificationChannel(channel_id, "guffy")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    // Notification 수신을 위한 체널 추가
+    private fun createNotificationChannel(id: String, name: String) {
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(id, name, importance)
+
+        val notificationManager: NotificationManager
+                = loginActivity.getSystemService(Context .NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }

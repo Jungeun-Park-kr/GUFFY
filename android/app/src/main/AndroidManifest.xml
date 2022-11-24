@@ -58,7 +58,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name="com.ssafy.firebase_2.MyFirebaseMessageService"
+            android:name="com.ssafy.guffy.Service.MyFirebaseMessageService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

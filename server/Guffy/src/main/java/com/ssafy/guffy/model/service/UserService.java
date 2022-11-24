@@ -16,6 +16,13 @@ public interface UserService {
     public User select(String email);
     
     /**
+     * 사용자 정보 조회
+     * @param id
+     * @return
+     */
+    public User selectById(int id);
+    
+    /**
      * 이메일, 비밀번호 입력받아 로그인 
      * @param user
      * @return 사용자 정보 반환
@@ -76,4 +83,5 @@ public interface UserService {
      * @return
      */
     int isUsedName(String name);
+   
 }

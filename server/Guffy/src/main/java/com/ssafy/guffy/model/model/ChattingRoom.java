@@ -14,7 +14,6 @@ public class ChattingRoom {
     public ChattingRoom() {
     	
     }
-    
 
 	public ChattingRoom(Integer id, String user1Id, String user2Id, Long user1LastVisitedTime,
 			Long user1LastChattingTime, Integer deleted) {
