@@ -10,6 +10,5 @@ public interface FriendsNumMapper {
 	List<FriendsNum> findNewFriends();
 	int update(FriendsNum friendsNum);
 	int create(String user_id);
-	String updateAll();
 	List<FriendsNum> getAllUser();
 }

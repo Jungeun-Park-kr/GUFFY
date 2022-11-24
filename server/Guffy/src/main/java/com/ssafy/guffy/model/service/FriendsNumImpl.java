@@ -37,11 +37,6 @@ public class FriendsNumImpl implements FriendsNumService{
 	}
 
 	@Override
-	public String updateAll() {
-		return mapper.updateAll();
-	}
-
-	@Override
 	public List<FriendsNum> getAllUser() {
 		return mapper.getAllUser();
 	}

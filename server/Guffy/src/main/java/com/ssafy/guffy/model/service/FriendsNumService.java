@@ -34,12 +34,6 @@ public interface FriendsNumService {
 	public int create(String user_id);
 	
 	/**'
-	 * 모든 사람의 친구 수 정보를 업데이트한다
-	 * @return 성공시 "success", 실패시 "fail"
-	 */
-	public String updateAll();
-	
-	/**'
 	 * friends 테이블 전체를 가지고 온다.
 	 * @return 성공시 "테이블 전체", 실패시 "null"
 	 */
