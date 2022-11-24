@@ -80,24 +80,6 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun askNotificationPermission() {
-        // This is only necessary for API level >= 33 (TIRAMISU)
-        /*if (Build.VERSION.SDK_INT >= 33) {
-            if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
-                // FCM SDK (and your app) can post notifications.
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
-                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-                //       If the user selects "No thanks," allow the user to continue without notifications.
-            } else {
-                // Directly ask for the permission
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }*/
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -114,11 +96,16 @@ class MainFragment : Fragment() {
 
         initUserData()
         initFriendsData()
-
         binding.swipeRefreshLayout.setOnRefreshListener {
-            mainActivity.recreate()
-            adapter.notifyDataSetChanged()
-            binding.swipeRefreshLayout.isRefreshing = false
+            CoroutineScope(Dispatchers.Main).launch {
+                //mainActivity.recreate()
+                withContext(Dispatchers.Main) {
+                    initFriendsData()
+                    delay(600)
+                }
+                if(friendList.size > 0)  adapter.notifyDataSetChanged()
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
         }
 
         // 내 닉네임 보여주기
@@ -144,14 +131,13 @@ class MainFragment : Fragment() {
                     val newFriendChat = retrofit.createChattingRoom(userId)
 //                    Log.d(TAG, "onViewCreated: 새로생긴 채팅룸id: ${newFriendChat.chat_id}")
                     if (newFriendChat.chat_id > 0) {
-
                         // 리스트에 새 친구 담기
                         launch(Dispatchers.Main) { // 뷰 관련된 것만 메인에서
                             addFriendInfo(newFriendChat.friend_id, newFriendChat.chat_id.toString())
-
+                            delay(350) // DB에서 친구 정보 조회해서 추가 될 때까지 뷰 딜레이
+                            Log.d(TAG, "onViewCreated: 추가됐는가????")
                             // 새 친구 데이터 불러와서 리스트에 추가하기
-                            adapter.notifyItemInserted(friendList.size) // 어댑터 갱신
-
+                            if(friendList.size > 0) adapter.notifyItemInserted(friendList.size) // 어댑터 갱신
                             showAlertWithMessageDialog(
                                 mainActivity,
                                 "새로운 친구를 추가했습니다.",
@@ -159,7 +145,6 @@ class MainFragment : Fragment() {
                                 "FriendsAddSucceeded"
                             )
                         }
-
                     } else {
                         launch(Dispatchers.Main) {
                             showAlertWithMessageDialog(
@@ -169,19 +154,14 @@ class MainFragment : Fragment() {
                                 "FriendsAddFailed"
                             )
                         }
-
                     }
-
                 } else { // 친구 3명 꽉 찬 경우
-                    //launch(Dispatchers.Main) {
                     showAlertWithMessageDialog(
                         mainActivity,
                         "더이상 추가할 수 없습니다",
                         "친구는 최대 3명까지 추가할 수 있습니다.",
                         "FriendsFull"
                     )
-                    //}
-
                 }
             }
         }
@@ -240,6 +220,9 @@ class MainFragment : Fragment() {
                 binding.mainChipGroup.addView(chip)
             }
 //            Log.d(TAG, "내 관심사 받아오기: ${myInterestList}")
+
+            // 내 mbti 보여주기
+            binding.mainMbtiTv.text = user.mbti
         }
     }
 
@@ -248,7 +231,6 @@ class MainFragment : Fragment() {
         // 서버에서 필요한 데이터 가져오기
         CoroutineScope(Dispatchers.IO).launch {
             friendList = mutableListOf()
-            val myInfo = retrofitUserService.getUser(userEmail)
 
             val result = retrofitUserService.getFriendIdList2(userEmail)
             if (result.isNotEmpty()) {
@@ -277,6 +259,9 @@ class MainFragment : Fragment() {
                 launch(Dispatchers.Main) {
                     Log.d(TAG, "onViewCreated: friendlist: $friendList")
                     adapter = FriendAdapter(friendList, userName)
+                    binding.contactListRecyclerView.adapter = adapter
+                    binding.contactListRecyclerView.layoutManager =
+                        LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false)
                     adapter.setItemClickListener(object : FriendAdapter.OnItemClickListener {
                         override fun onClick(view: View, position: Int) {
                             // 이미 삭제된 친구의 경우
@@ -308,9 +293,6 @@ class MainFragment : Fragment() {
                             }
                         }
                     })
-                    binding.contactListRecyclerView.adapter = adapter
-                    binding.contactListRecyclerView.layoutManager =
-                        LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false)
                 }
             } else {
                 Log.d(TAG, "initData: 친구 목록 없음")
@@ -333,36 +315,30 @@ class MainFragment : Fragment() {
         lateinit var chattingRoom: ChattingRoom
         when (item.itemId) {
             R.id.context_menu_delete -> { // 채팅창 나가기 버튼
-                val dialog = ConfirmDialog(
-                    object : ConfirmDialogInterface {
+                val dialog = ConfirmDialog(object : ConfirmDialogInterface {
                         override fun onYesButtonClick(id: String) {
                             Log.d(TAG, "onContextItemSelected: 채팅창 나가기 클릭")
                             // 채팅리스트에서 내 아이디 삭제
                             CoroutineScope(Dispatchers.IO).launch {
-                                chattingRoom =
-                                    retrofitChatroomService.getChattingRoom(chattingRoomId)
+                                chattingRoom = retrofitChatroomService.getChattingRoom(chattingRoomId)
                                 if (chattingRoom.deleted == 1) { // 이미 한쪽 나감
-                                    Log.d(
-                                        TAG,
-                                        "onContextItemSelected: 이미 친구가 날 삭제함 (삭제한 채팅방 번호): ${chattingRoom.id}"
-                                    )
+                                    Log.d(TAG, "onContextItemSelected: 이미 친구가 날 삭제함 (삭제한 채팅방 번호): ${chattingRoom.id}")
                                     retrofitChatroomService.deleteChattingRoom(chattingRoomId) // 완전 삭제
                                 } else { // 내 아이디만 채팅창에서 삭제하기
                                     chattingRoom.deleted = 1 // 삭제된 채팅방임을 표시하기
                                     retrofitChatroomService.updateChattingRoom(chattingRoom) // 채팅창 id 상태 업데이트
+                                    // 친구 수 줄이기
+                                    val friendsNum = retrofitChatroomService.getFriendsNum(userId)
+                                    friendsNum.friendsNum = friendsNum.friendsNum - 1 // 친구 수 하나 빼기
+                                    retrofitChatroomService.updateFriendsNum(friendsNum) // DB 업데이트
                                 }
-                                delay(100)
-                                launch(Dispatchers.Main) { // 그리고 리스트, Adapter에서 삭제하기
-                                    friendList.removeAt(position)
-                                    adapter.notifyItemRemoved(position)
-                                }
-                                // 친구 수 줄이기 (공통)
-                                val friendsNum = retrofitChatroomService.getFriendsNum(userId)
-                                friendsNum.friendsNum = friendsNum.friendsNum - 1 // 친구 수 하나 빼기
-                                retrofitChatroomService.updateFriendsNum(friendsNum) // DB 업데이트
-
                                 // Firebase DB 삭제
                                 deleteFirebase(chattingRoomId)
+                            }
+                            CoroutineScope(Dispatchers.Main).launch {
+                                // 그리고 리스트, Adapter에서 삭제하기
+                                friendList.removeAt(position)
+                                adapter.notifyItemRemoved(position)
                             }
                         }
                     }, "정말로 채팅방을 나가시겠습니까?",
@@ -370,8 +346,6 @@ class MainFragment : Fragment() {
                 )
                 dialog.isCancelable = false
                 dialog.show(mainActivity.supportFragmentManager, "networkUnAvailable")
-
-
             }
         }
         return super.onContextItemSelected(item)

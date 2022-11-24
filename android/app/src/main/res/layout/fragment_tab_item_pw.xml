@@ -7,22 +7,6 @@
     android:padding="16dp"
     tools:context=".settingsfragment.TabItemPwFragment">
 
-    <!--<TextView
-        android:id="@+id/tab_item_pw_email_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="이메일"/>
-
-    <TextView
-        android:id="@+id/tab_item_pw_email_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_item_pw_email_label"
-        android:text="test123@guffy.com"/>-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tab_item_pw_email_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -66,6 +50,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tab_item_pw_origin_pw_et"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -87,6 +72,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tab_item_pw_new_pw_et"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -109,6 +95,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tab_item_pw_new_pw_confirm_et"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

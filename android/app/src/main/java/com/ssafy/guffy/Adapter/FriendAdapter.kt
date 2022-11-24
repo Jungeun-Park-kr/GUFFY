@@ -49,7 +49,7 @@ class FriendAdapter(var list:MutableList<FriendItemDto>, val nickname: String)
                 0 -> { // dafult : 아무것도 없음
                     Log.d(TAG, "bindingInfo: 디폴트 상태")
                     binding.contactListItemInformTv.visibility = View.GONE
-                    binding.contactListItemIcon.visibility = View.GONE
+                    binding.contactListItemIcon.visibility = View.INVISIBLE
                     //binding.contactListItemIcon.setImageIcon()
                 }
                 1-> { // 새로 추가
