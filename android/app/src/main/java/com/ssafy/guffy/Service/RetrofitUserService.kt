@@ -4,7 +4,7 @@ import com.ssafy.guffy.models.*
 import retrofit2.Call
 import retrofit2.http.*
 
-interface RetrofitUserInterface {
+interface RetrofitUserService {
 
     // @GET( EndPoint-자원위치(URI) )
     @GET("/user/friend/friendsIds")

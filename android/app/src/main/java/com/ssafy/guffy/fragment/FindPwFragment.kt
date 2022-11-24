@@ -7,13 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ssafy.guffy.ApplicationClass
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserInterface
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.databinding.FragmentFindPwBinding
-import com.ssafy.guffy.models.User
-import com.ssafy.guffy.util.Common
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,7 +45,7 @@ class FindPwFragment : Fragment() {
 
                 if (email.isNotEmpty()) {
 
-                    var isValidUser = retrofitUserInterface.getEmailIsUsed(email).awaitResponse().body() as String
+                    var isValidUser = retrofitUserService.getEmailIsUsed(email).awaitResponse().body() as String
                     Log.d(TAG, "onViewCreated: DB에 있는지 검사한 결과 body >> ${isValidUser}")
                     if (isValidUser == "no"){
                         Log.d(TAG, "onViewCreated: DB에 없는 이메일")
@@ -67,7 +64,7 @@ class FindPwFragment : Fragment() {
                             .commit()
                     }
                     else{ // 디비에 있는 이메일임
-                        var result = retrofitUserInterface.changePw(email).awaitResponse().body() ?: "null"
+                        var result = retrofitUserService.changePw(email).awaitResponse().body() ?: "null"
                         Log.d(TAG, "onViewCreated: 새로운 비밀번호 발송 성공 + ${result}")
                         if (result == "success") {
                             Log.d(TAG, "onViewCreated: 새로운 비밀번호 발송 성공 + $result")

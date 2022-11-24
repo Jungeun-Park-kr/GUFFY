@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.guffy.ApplicationClass
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserInterface
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.activity.MainActivity
@@ -19,7 +19,6 @@ import com.ssafy.guffy.util.Common
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 
 private const val TAG = "LoginFragment 구피"
@@ -69,7 +68,7 @@ class LoginFragment : Fragment() {
             if (email.isNotEmpty() && pw.isNotEmpty()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     var user = User(email, pw)
-                    var result = retrofitUserInterface.getLoginResult(user).awaitResponse().body()
+                    var result = retrofitUserService.getLoginResult(user).awaitResponse().body()
                     if (result == null) { // 로그인 실패
                         Log.d(TAG, "로그인 실패")
                         Common.showAlertDialog(
@@ -88,7 +87,7 @@ class LoginFragment : Fragment() {
                         Log.d(TAG, "nickname : ${ApplicationClass.sharedPreferences.getString("nickname", "").toString()}")
                         Log.d(TAG, "email : ${ApplicationClass.sharedPreferences.getString("email", "").toString()}")
 
-                        val user = retrofitUserInterface.getUser(result.email).awaitResponse().body() as User
+                        val user = retrofitUserService.getUser(result.email).awaitResponse().body() as User
 
                         Log.d(TAG, "사용자 불러옵니다: $user")
 

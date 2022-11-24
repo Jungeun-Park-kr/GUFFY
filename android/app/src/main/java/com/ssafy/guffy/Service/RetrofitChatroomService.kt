@@ -1,10 +1,9 @@
 package com.ssafy.guffy.Service
 
 import com.ssafy.guffy.models.*
-import retrofit2.Call
 import retrofit2.http.*
 
-interface RetrofitChatroomInterface {
+interface RetrofitChatroomService {
 
     @GET("/friendsNum")
     suspend fun getFriendsNum(@Query("user_id") userId:Int): FriendsNum
