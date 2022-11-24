@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources.getColorStateList
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -222,7 +223,10 @@ class MainFragment : Fragment() {
                 chip.id = i
                 // Chip 의 텍스트 지정
                 chip.text = myInterestList.get(i)
-                chip.setChipBackgroundColorResource(R.color.orange)
+                chip.setChipBackgroundColorResource(R.color.none)
+                chip.setChipStrokeColor(getColorStateList(mainActivity, R.color.orange))
+                chip.setChipStrokeWidth(2.5F)
+
                 // chip group 에 해당 chip 추가
                 binding.mainChipGroup.addView(chip)
             }
@@ -380,19 +384,23 @@ class MainFragment : Fragment() {
             }
 
             var interest = "#${friend.interest1} #${friend.interest2} #${friend.interest3}"
-            if (friend.interest4 != "") {
+            Log.d(TAG, "addFriendInfo: interest4: ${friend.interest4}, interest5: ${friend.interest5}")
+            if (!friend.interest4.isNullOrEmpty()) {
                 interest += " #${friend.interest4}"
             }
-            if (friend.interest5 != "") {
+            if (!friend.interest5.isNullOrEmpty()) {
                 interest += " #${friend.interest5}"
             }
             var state = 0 // default
-            if (friend.user2_last_chatting_time == 0L) { // 새로 추가된 경우 (아직 user2가 채팅 시작 안함)
+            // 내가 유저 1, 친구가 유저 2 이고, 내가 채팅 시작 했을때
+            if (friend.friend == "user2" && friend.user1_last_visited_time == 0L) { // 새로 추가된 경우 (아직 user2가 채팅 시작 안함)
+                state = 1 // 새로 추가된 친구
+            } else if (friend.friend == "user1" && friend.user2_last_visited_time == 0L) { // 나:유저2, 친구:유저1, 내가 아직 접속 안 한 경우
                 state = 1 // 새로 추가된 친구
             } else {
                 if (friend.friend == "user2" && (friend.user1_last_visited_time < friend.user2_last_chatting_time)) { // 내가 user1 <= 친구가 user2인경우
                     state = 2 // 새 메시지 온 경우
-                } else if (friend.user2_last_visited_time < friend.user1_last_chatting_time) { // 내가 user2
+                } else if (friend.friend == "user1" && (friend.user2_last_visited_time < friend.user1_last_chatting_time)) { // 내가 user2
                     state = 2 // 새 메시지 온 경우
                 }
             }
