@@ -11,9 +11,9 @@
     <color name="text_black">#333333</color>
     <color name="orange">#ffa718</color>
     <color name="grey">#e6e6e6</color>
-    <color name="dark_grey">#d6d6d6</color>
     <color name="bright_grey">#fafafa</color>
     <color name="none">#00000000</color>
     <color name="dark_orange">#d98e16</color>
     <color name="green">#009000</color>
+    <color name="dark_grey">#A9A9A9</color>
 </resources>

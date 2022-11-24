@@ -113,12 +113,12 @@ class JoinFragment : Fragment() {
                             ""
                         )
                         binding.joinCertificationNumberBtn.backgroundTintList =
-                            ContextCompat.getColorStateList(loginActivity, R.color.green)
+                            ContextCompat.getColorStateList(loginActivity, R.color.dark_grey)
                         certificationSuccess = true
                         binding.joinCertificationNumberTextInputLayout.isEnabled = false
                         binding.joinCertificationNumberBtn.isClickable = false;
                         binding.joinEmailCheckBtn.backgroundTintList =
-                            ContextCompat.getColorStateList(loginActivity, R.color.green)
+                            ContextCompat.getColorStateList(loginActivity, R.color.dark_grey)
                     } else {
                         Toast.makeText(loginActivity, "인증번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
                     }
