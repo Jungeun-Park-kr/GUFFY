@@ -1,22 +1,16 @@
 package com.ssafy.guffy.settingsfragment
 
-import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.guffy.ApplicationClass
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserInterface
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.R
-import com.ssafy.guffy.activity.ChattingActivity
 import com.ssafy.guffy.activity.MainActivity
-import com.ssafy.guffy.databinding.FragmentTabItemInterestBinding
 import com.ssafy.guffy.databinding.FragmentTabItemMbtiBinding
 import com.ssafy.guffy.dialog.ConfirmNoCancelDialog
-import com.ssafy.guffy.mainfragment.MainFragment
 import com.ssafy.guffy.models.User
 import com.ssafy.guffy.util.Common
 import kotlinx.coroutines.CoroutineScope
@@ -77,12 +71,12 @@ class TabItemMbtiFragment : Fragment() {
             } else {
 
                 CoroutineScope(Dispatchers.Main).launch {
-                    var user = retrofitUserInterface.getUser(
+                    var user = retrofitUserService.getUser(
                         ApplicationClass.sharedPreferences.getString("email", "").toString()
                     ).awaitResponse().body() as User
 
                     user.mbti = Common.mbtiList.get(clickedMBTIChip)
-                    val result = retrofitUserInterface.updateUser(user).awaitResponse().body() as String
+                    val result = retrofitUserService.updateUser(user).awaitResponse().body() as String
                     if (result == "success") {
                         val dialog = ConfirmNoCancelDialog(
                             object : ConfirmNoCancelDialog.ConfirmNoCancelDialogInterface {

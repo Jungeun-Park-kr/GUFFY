@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.guffy.fcm.dto.FireStoreMessage;
 import com.ssafy.guffy.fcm.service.FirebaseCloudMessageDataService;
 import com.ssafy.guffy.fcm.service.FirebaseCloudMessageService;
+import com.ssafy.guffy.model.model.Token;
 
 @RestController
 @CrossOrigin("*")
@@ -27,9 +28,9 @@ public class TokenController {
     FirebaseCloudMessageDataService dataService;
     
     @PostMapping("/token")
-    public String registToken(String token) {
+    public String registToken(Token token) {
     	logger.info("registToken : token:{}", token);
-        service.addToken(token);
+        service.addToken(token.getToken());
         return "'"+token+"'" ;
     }
     

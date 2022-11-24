@@ -77,6 +77,8 @@ dependencies {
     // Firebase UI
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
     implementation 'com.firebaseui:firebase-ui-database:8.0.2'
+
+    implementation 'com.google.gms:google-services:4.3.14'
 }
 
 apply plugin: 'com.google.gms.google-services'

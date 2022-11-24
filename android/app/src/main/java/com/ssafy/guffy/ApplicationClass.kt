@@ -6,14 +6,13 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.ssafy.guffy.Service.RetrofitChatroomInterface
-import com.ssafy.guffy.Service.RetrofitUserInterface
+import com.ssafy.guffy.Service.RetrofitChatroomService
+import com.ssafy.guffy.Service.RetrofitUserService
 import com.ssafy.guffy.util.CheckNetwork
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.lang.reflect.Type
 
 // 앱이 실행될 때 1번만 실행이 됨
@@ -25,8 +24,8 @@ class ApplicationClass : Application() {
     companion object {
         // 전역변수 문법을 통해 Retrofit 인스턴스를 앱 실행 시 1번만 생성하여 사용 (싱글톤 객체)
         lateinit var wRetrofit : Retrofit
-        lateinit var retrofitUserInterface:RetrofitUserInterface
-        lateinit var retrofitChatroomInterface: RetrofitChatroomInterface
+        lateinit var retrofitUserService:RetrofitUserService
+        lateinit var retrofitChatroomService: RetrofitChatroomService
 
         // 로그인 정보를 담기 위한 sharedPreference
         lateinit var sharedPreferences: SharedPreferences
@@ -57,8 +56,8 @@ class ApplicationClass : Application() {
                 .addConverterFactory(nullOnEmptyConverterFactory)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
-        retrofitUserInterface = wRetrofit.create(RetrofitUserInterface::class.java)
-        retrofitChatroomInterface = wRetrofit.create(RetrofitChatroomInterface::class.java)
+        retrofitUserService = wRetrofit.create(RetrofitUserService::class.java)
+        retrofitChatroomService = wRetrofit.create(RetrofitChatroomService::class.java)
 
         // 네트워크에 연결되어있는지 확인 후 없으면 앱 종료 시키기위해 네트워크 연결상태 감지 콜백 생성시켜두기
         val network: CheckNetwork = CheckNetwork(applicationContext)

@@ -1,7 +1,6 @@
 package com.ssafy.guffy.settingsfragment
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,19 +8,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.ssafy.guffy.ApplicationClass
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserInterface
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.ChattingActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.models.User
-import com.ssafy.guffy.databinding.FragmentMainBinding
 import com.ssafy.guffy.databinding.FragmentTabItemInterestBinding
 import com.ssafy.guffy.dialog.ConfirmNoCancelDialog
-import com.ssafy.guffy.fragment.LoginFragment
 import com.ssafy.guffy.mainfragment.MainFragment
 import com.ssafy.guffy.util.Common
 import kotlinx.coroutines.CoroutineScope
@@ -54,7 +49,7 @@ class TabItemInterestFragment : Fragment() {
         makeChips()
         binding.tabItemInterestSaveBtn.setOnClickListener{
             CoroutineScope(Dispatchers.Main).launch {
-                var user = retrofitUserInterface.getUser(ApplicationClass.sharedPreferences.getString("email","").toString()).awaitResponse().body() as User
+                var user = retrofitUserService.getUser(ApplicationClass.sharedPreferences.getString("email","").toString()).awaitResponse().body() as User
                 user.interest1 = clickedInterestChipList.get(0)
                 user.interest2 = clickedInterestChipList.get(1)
                 user.interest3 = clickedInterestChipList.get(2)
@@ -68,7 +63,7 @@ class TabItemInterestFragment : Fragment() {
                     user.interest4 = clickedInterestChipList.get(3)
                     user.interest5 = clickedInterestChipList.get(4)
                 }
-                var result = retrofitUserInterface.updateUser(user).awaitResponse().body() as String
+                var result = retrofitUserService.updateUser(user).awaitResponse().body() as String
                 Log.d(TAG, "변경된 유저 전송 결과 : $result ")
                 if (result == "success"){
                     val dialog = ConfirmNoCancelDialog(

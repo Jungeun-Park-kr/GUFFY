@@ -1,6 +1,9 @@
 package com.ssafy.guffy.mainfragment
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.firebase.database.DatabaseReference
@@ -15,11 +20,11 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ssafy.guffy.Adapter.FriendAdapter
 import com.ssafy.guffy.ApplicationClass
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitChatroomInterface
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserInterface
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitChatroomService
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.ApplicationClass.Companion.wRetrofit
 import com.ssafy.guffy.R
-import com.ssafy.guffy.Service.RetrofitChatroomInterface
+import com.ssafy.guffy.Service.RetrofitChatroomService
 import com.ssafy.guffy.activity.ChattingActivity
 import com.ssafy.guffy.activity.MainActivity
 import com.ssafy.guffy.databinding.FragmentMainBinding
@@ -50,11 +55,44 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity = context as MainActivity
+
+        // 알림 권한 확인
+
         userName = ApplicationClass.sharedPreferences.getString("nickname", "").toString()
         userId = ApplicationClass.sharedPreferences.getString("id", "").toString().toInt()
         userEmail = ApplicationClass.sharedPreferences.getString("email", "").toString()
 
         Log.d(TAG, "onCreate: 이름: $userName, id: $userId, email: $userEmail")
+    }
+
+    // Declare the launcher at the top of your Activity/Fragment:
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // FCM SDK (and your app) can post notifications.
+        } else {
+            // TODO: Inform user that that your app will not show notifications.
+        }
+    }
+
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        /*if (Build.VERSION.SDK_INT >= 33) {
+            if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // TODO: display an educational UI explaining to the user the features that will be enabled
+                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                //       If the user selects "No thanks," allow the user to continue without notifications.
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }*/
     }
 
     override fun onCreateView(
@@ -84,13 +122,13 @@ class MainFragment : Fragment() {
         // 친구 추가 버튼 클릭
         binding.mainFriendAddBtn.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val result = retrofitChatroomInterface.getFriendsNum(userId)
+                val result = retrofitChatroomService.getFriendsNum(userId)
                 Log.d(TAG, "onViewCreated: 나의 친구 수: $result")
 
                 if(result.friendsNum < 3) { // 친구 3명 미만
                     mainActivity.showFindingFriendDialog()
                     // 여기서 친구 추가 작업 해주기
-                    val retrofit = wRetrofit.create(RetrofitChatroomInterface::class.java)
+                    val retrofit = wRetrofit.create(RetrofitChatroomService::class.java)
                     val newFriendChat = retrofit.createChattingRoom(userId)
                     Log.d(TAG, "onViewCreated: 새로생긴 채팅룸id: ${newFriendChat.chat_id}")
                     if(newFriendChat.chat_id > 0) {
@@ -149,7 +187,7 @@ class MainFragment : Fragment() {
         // 1. 내 관심사 가져오기
         CoroutineScope(Dispatchers.Main).launch {
             val user =
-                retrofitUserInterface.getUser(userEmail).awaitResponse().body() as User
+                retrofitUserService.getUser(userEmail).awaitResponse().body() as User
 
             Log.d(TAG, "이메일로 검색한 user 정보: ${user}")
             myInterestList.add(user.interest1)
@@ -187,9 +225,10 @@ class MainFragment : Fragment() {
     private fun initFriendsData() {
         // 서버에서 필요한 데이터 가져오기
         CoroutineScope(Dispatchers.IO).launch {
-            val myInfo = retrofitUserInterface.getUser(userEmail)
+            friendList = mutableListOf()
+            val myInfo = retrofitUserService.getUser(userEmail)
 
-            val result = retrofitUserInterface.getFriendIdList2(userEmail)
+            val result = retrofitUserService.getFriendIdList2(userEmail)
             if(result.isNotEmpty()) {
                 friendsIdList = result as MutableList<FriendListItem>
                 Log.d(TAG, "friendsIdList: $${friendsIdList}")
@@ -256,22 +295,22 @@ class MainFragment : Fragment() {
                         Log.d(TAG, "onContextItemSelected: 채팅창 나가기 클릭")
                         // 채팅리스트에서 내 아이디 삭제
                         CoroutineScope(Dispatchers.IO).launch {
-                            chattingRoom=retrofitChatroomInterface.getChattingRoom(chattingRoomId)
+                            chattingRoom=retrofitChatroomService.getChattingRoom(chattingRoomId)
                             if(chattingRoom.deleted == 1) { // 이미 한쪽 나감
                                 Log.d(TAG, "onContextItemSelected: 이미 친구가 날 삭제함 (삭제한 채팅방 번호): ${chattingRoom.id}")
-                                retrofitChatroomInterface.deleteChattingRoom(chattingRoomId) // 완전 삭제
+                                retrofitChatroomService.deleteChattingRoom(chattingRoomId) // 완전 삭제
                             } else { // 내 아이디만 채팅창에서 삭제하기
                                 chattingRoom.deleted = 1 // 삭제된 채팅방임을 표시하기
-                                retrofitChatroomInterface.updateChattingRoom(chattingRoom) // 채팅창 id 상태 업데이트
+                                retrofitChatroomService.updateChattingRoom(chattingRoom) // 채팅창 id 상태 업데이트
                             }
                             launch(Dispatchers.Main){ // 그리고 리스트, Adapter에서 삭제하기
                                 friendList.removeAt(position)
                                 adapter.notifyItemRemoved(position)
                             }
                             // 친구 수 줄이기 (공통)
-                            val friendsNum = retrofitChatroomInterface.getFriendsNum(userId)
+                            val friendsNum = retrofitChatroomService.getFriendsNum(userId)
                             friendsNum.friendsNum = friendsNum.friendsNum-1 // 친구 수 하나 빼기
-                            retrofitChatroomInterface.updateFriendsNum(friendsNum) // DB 업데이트
+                            retrofitChatroomService.updateFriendsNum(friendsNum) // DB 업데이트
 
                             // Firebase DB 삭제
                             deleteFirebase(chattingRoomId)
@@ -293,7 +332,7 @@ class MainFragment : Fragment() {
     suspend fun addFriendInfo(friendId:Int, chatId:String) {
         // coroutine으로 호출
         CoroutineScope(Dispatchers.IO).launch {
-            val friend = retrofitUserInterface.getFriend(userId!!, friendId)
+            val friend = retrofitUserService.getFriend(userId!!, friendId)
             Log.d(TAG, "friend: $friend")
 
             val gender:String = if(friend.gender == "M") {

@@ -2,7 +2,6 @@ package com.ssafy.guffy.fragment
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,11 +13,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.fragment.app.Fragment
 import com.google.android.material.chip.Chip
-import com.ssafy.guffy.ApplicationClass
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserInterface
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.databinding.FragmentJoinBinding
@@ -31,12 +28,8 @@ import com.ssafy.guffy.util.Common.Companion.showAlertDialog
 import com.ssafy.guffy.util.Common.Companion.showAlertWithMessageDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-import kotlin.math.log
 
 
 private const val TAG = "JoinFragment 구피"
@@ -73,7 +66,7 @@ class JoinFragment : Fragment() {
             var email = binding.emailCheckTv.text.trim().toString()
             Log.d(TAG, "onViewCreated: ")
             CoroutineScope(Dispatchers.Main).launch {
-                val result = retrofitUserInterface.getEmailIsUsed(email).awaitResponse().body()
+                val result = retrofitUserService.getEmailIsUsed(email).awaitResponse().body()
                 if (result == "yes") {
                     showAlertDialog(
                         loginActivity,
@@ -93,7 +86,7 @@ class JoinFragment : Fragment() {
                     binding.joinEmailCheckBtn.isClickable = false
                     CoroutineScope(Dispatchers.Main).launch {
                         var result =
-                            retrofitUserInterface.getMainAuth(binding.joinEmailEditText.text.toString().trim())
+                            retrofitUserService.getMainAuth(binding.joinEmailEditText.text.toString().trim())
                                 .awaitResponse().body().toString()
                         if (result.isNotEmpty()) {
                             certificationNumber = result
@@ -331,7 +324,7 @@ class JoinFragment : Fragment() {
                 Log.d(TAG, "onViewCreated: ${user}")
                 // 회원가입 성공 dialog, 다이어로그의 확인버튼 누르면 로그인 액티비티로 넘어감
                 CoroutineScope(Dispatchers.Main).launch {
-                    val result = retrofitUserInterface.addUser(user).awaitResponse().body() as String
+                    val result = retrofitUserService.addUser(user).awaitResponse().body() as String
                     Log.d(TAG, "onViewCreated: 회원가입 : $result")
                     if (result == "success") {
                         val builder = AlertDialog.Builder(requireContext())

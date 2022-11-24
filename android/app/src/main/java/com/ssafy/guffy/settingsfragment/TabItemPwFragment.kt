@@ -1,7 +1,5 @@
 package com.ssafy.guffy.settingsfragment
 
-import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,16 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.guffy.ApplicationClass
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserInterface
-import com.ssafy.guffy.R
-import com.ssafy.guffy.Service.RetrofitUserInterface
-import com.ssafy.guffy.activity.ChattingActivity
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitUserService
 import com.ssafy.guffy.activity.MainActivity
-import com.ssafy.guffy.databinding.FragmentTabItemInterestBinding
 import com.ssafy.guffy.databinding.FragmentTabItemPwBinding
 import com.ssafy.guffy.dialog.ConfirmNoCancelDialog
-import com.ssafy.guffy.mainfragment.MainFragment
-import com.ssafy.guffy.mainfragment.SettingsFragment
 import com.ssafy.guffy.models.User
 import com.ssafy.guffy.util.Common
 import com.ssafy.guffy.util.Common.Companion.passwordRegex
@@ -147,13 +139,13 @@ class TabItemPwFragment : Fragment() {
                 Log.d(TAG, "onViewCreated: newPW1 = $newPW1, newPW2 = $newPW2")
 
 
-                val user = retrofitUserInterface.getUser(email).awaitResponse().body() as User
+                val user = retrofitUserService.getUser(email).awaitResponse().body() as User
                 val dbId = user.id
                 var nowAndNewPwIsSame = false
                 Log.d(TAG, "디비 저장 id : ${user.id}")
 
                 user.pw = currentPW
-                var result = retrofitUserInterface.getLoginResult(user).awaitResponse().body()
+                var result = retrofitUserService.getLoginResult(user).awaitResponse().body()
                 if (result == null) {
                     Log.d(TAG, "잘못된 현재 비밀번호: result == null")
                     nowAndNewPwIsSame = false
@@ -176,7 +168,7 @@ class TabItemPwFragment : Fragment() {
                     Common.showAlertDialog(mainActivity, "현재 비밀번호가 일치하지 않습니다.", "")
                 } else {
                     user.pw = newPW1
-                    val result = retrofitUserInterface.updatePW(user).awaitResponse().body() as String
+                    val result = retrofitUserService.updatePW(user).awaitResponse().body() as String
                     if (result == "success") {
                         val dialog = ConfirmNoCancelDialog(
                             object : ConfirmNoCancelDialog.ConfirmNoCancelDialogInterface {

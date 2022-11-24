@@ -5,9 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,11 +13,8 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ssafy.guffy.Adapter.ChattingAdapter
-import com.ssafy.guffy.ApplicationClass
-import com.ssafy.guffy.ApplicationClass.Companion.retrofitChatroomInterface
+import com.ssafy.guffy.ApplicationClass.Companion.retrofitChatroomService
 import com.ssafy.guffy.databinding.ActivityChattingBinding
-import com.ssafy.guffy.databinding.ItemChatMessageBinding
-import com.ssafy.guffy.dialog.ConfirmDialog
 import com.ssafy.guffy.dialog.ConfirmNoCancelDialog
 import com.ssafy.guffy.dto.ChattingItemDto
 import com.ssafy.guffy.util.Common
@@ -98,17 +92,19 @@ class ChattingActivity : AppCompatActivity() {
                 var chattingItem = ChattingItemDto("", myNickName, message, time)
 
                 // Realtime database에 전송
-                Log.d(TAG, "onCreate: db에 새로운 메세지 전송")
                 thisChattingRoomRef.push().setValue(chattingItem).addOnSuccessListener {
                     // 성공시 edit text 지우기
                     binding.chattingMessageEt.setText("")
-                    lastChatTime = time // 가장 최근에 채팅 보낸 시간 저장
+
+
+                    // 마지막 채팅 전송시간, DB 접속시간 갱신
+                    lastChatTime = time
+                    updateChattingRoomDB()
                 }
-
             }
-
         }
     }
+
 
     override fun onStop() {
         super.onStop()
@@ -116,26 +112,13 @@ class ChattingActivity : AppCompatActivity() {
         val lastVisitedTime = System.currentTimeMillis()
 
         // 서버에 마지막 채팅시간, 마지막 방문시간 저장하기
-        CoroutineScope(Dispatchers.IO).launch {
-            var chattingRoom = retrofitChatroomInterface.getChattingRoom(chattingRoomId.toInt())
-            if(myUser == "user1") { // 내가 user1
-                chattingRoom.user1LastChattingTime = lastChatTime
-                chattingRoom.user1LastVisitedTime = lastVisitedTime
-            } else { // 내가 user2
-                chattingRoom.user2LastChattingTime = lastChatTime
-                chattingRoom.user2LastVisitedTime = lastVisitedTime
-            }
-            retrofitChatroomInterface.updateChattingRoom(chattingRoom)
-            Log.d(TAG, "onStop: 시간 갱신 완료! lastVisitedTime : $lastVisitedTime")
-        }
-
+        updateChattingRoomDB()
     }
 
 
     private fun initFirebase() {
         // firebase 데이터베이스 관리 객체 얻어오기
         thisChattingRoomRef = Firebase.database.getReference("chattingRoomId").child(chattingRoomId)
-
         childEventListener = object : ChildEventListener {
             @SuppressLint("NotifyDataSetChanged")
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -166,5 +149,23 @@ class ChattingActivity : AppCompatActivity() {
             }
         }
         thisChattingRoomRef.addChildEventListener(childEventListener)
+    }
+
+    // 마지막 채팅, 접속시간 갱신하기
+    private fun updateChattingRoomDB() {
+        // 서버에 마지막 채팅시간, 마지막 방문시간 저장하기
+        CoroutineScope(Dispatchers.IO).launch {
+            val lastVisitedTime = System.currentTimeMillis()
+            var chattingRoom = retrofitChatroomService.getChattingRoom(chattingRoomId.toInt())
+            if(myUser == "user1") { // 내가 user1
+                chattingRoom.user1LastChattingTime = lastChatTime
+                chattingRoom.user1LastVisitedTime = lastVisitedTime
+            } else { // 내가 user2
+                chattingRoom.user2LastChattingTime = lastChatTime
+                chattingRoom.user2LastVisitedTime = lastVisitedTime
+            }
+            retrofitChatroomService.updateChattingRoom(chattingRoom)
+            Log.d(TAG, "onStop: 시간 갱신 완료! lastVisitedTime : $lastVisitedTime")
+        }
     }
 }
