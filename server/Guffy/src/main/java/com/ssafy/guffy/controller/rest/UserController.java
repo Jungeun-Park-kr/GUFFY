@@ -191,7 +191,7 @@ public class UserController {
                 
                 log.info("jsonToNickname: "+jsonToNickname.getWords().get(0));
                 newName = jsonToNickname.getWords().get(0);
-            
+                
                 // 사용 안 한 닉네임일 경우에만 리턴시켜주기
                 log.info("사용했는 닉네임인가? :"+service.isUsedName(newName));
                 if(service.isUsedName(newName) == 0) return newName;
