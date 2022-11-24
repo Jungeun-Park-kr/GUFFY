@@ -147,8 +147,6 @@ class LoginFragment : Fragment() {
                     ""
                 )
             }
-
         }
-
     }
 }

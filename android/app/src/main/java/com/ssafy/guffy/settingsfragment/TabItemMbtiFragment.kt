@@ -1,6 +1,7 @@
 package com.ssafy.guffy.settingsfragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
 
+private const val TAG = "TabItemMbtiFragment 구피"
 
 class TabItemMbtiFragment : Fragment() {
     private lateinit var mainActivity: MainActivity
@@ -55,6 +57,8 @@ class TabItemMbtiFragment : Fragment() {
                     break;
                 }
             }
+
+            Log.d(TAG, "onViewCreated: $clickedMBTIChip")
 
 
             when (clickedMBTIChip) {
