@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
 
         // 네트워크 연결 상태 확인 후 인터넷 없으면 앱 종료
         if(!Common.isNetworkConnected) {
-            Log.d(TAG, "onCreate: 네트워크 연결 없음!!")
+            Log.d(TAG, "onCreate: 네트워크 연결 없음!! 로그인 !!!!")
             val dialog = ConfirmNoCancelDialog(object:ConfirmNoCancelDialog.ConfirmNoCancelDialogInterface {
                 override fun onYesButtonClick(id: String) {
                     finishAndRemoveTask() // 앱 종료

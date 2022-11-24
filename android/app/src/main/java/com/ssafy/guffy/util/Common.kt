@@ -10,10 +10,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val TAG = "Common_구피"
+private const val TAG = "Common 구피"
 class Common {
 
     companion object {
+        var helloList = listOf("안녕하세요 ~", "반갑습니다 !", "좀 더 자주 오세요 ~~ ", "자주 오시네요 !! ", "오랜만이네요..", "또 뵙네요  !")
         var interstList = listOf(
             "안드로이드",
             "iOS",
@@ -107,6 +108,12 @@ class Common {
             return password.matches(regExp.toRegex())
         }
 
+        fun emailRegex(email: String): Boolean {
+            // 영문, 특수문자, 숫자 포함 8자 이상
+            var regExp = """^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+${'$'}"""
+            return email.matches(regExp.toRegex())
+        }
+
         fun showAlertDialog(context: AppCompatActivity, title:String, tag:String) {
             val dialog = AlertDialog(context, title)
             // 알림창이 띄워져있는 동안 배경 클릭 막기
@@ -124,7 +131,6 @@ class Common {
 
         // Global variable used to store network state
         var isNetworkConnected = false
-
 
         // FCM Channel Id
         const val channel_id = "guffy_channel"

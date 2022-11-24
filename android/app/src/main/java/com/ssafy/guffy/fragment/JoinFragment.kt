@@ -20,6 +20,7 @@ import com.ssafy.guffy.R
 import com.ssafy.guffy.activity.LoginActivity
 import com.ssafy.guffy.databinding.FragmentJoinBinding
 import com.ssafy.guffy.models.User
+import com.ssafy.guffy.util.Common.Companion.emailRegex
 import com.ssafy.guffy.util.Common.Companion.genderList
 import com.ssafy.guffy.util.Common.Companion.interstList
 import com.ssafy.guffy.util.Common.Companion.mbtiList
@@ -62,31 +63,82 @@ class JoinFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Log.d(TAG, "onViewCreated: 회원가입")
+
+//        val emailListener = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//            }
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                if (!passwordRegex(s.toString())) {
+//                    binding.joinEmailTextInputLayout.error = "적절한 이메일이 아닙니다."
+//                } else {
+//                    binding.joinEmailEditText.hint = "적절한 이메일입니다."
+//                    binding.joinEmailTextInputLayout.error = ""
+//                }
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                if (s != null) {
+//                    when {
+//                        s.isEmpty() -> {
+//                            binding.joinEmailTextInputLayout
+//                            binding.joinEmailTextInputLayout.error = "적절한 이메일이 아닙니다."
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        binding.joinEmailTextInputLayout.editText?.addTextChangedListener(emailListener)
+//        binding.joinEmailTextInputLayout.hint = "이메일을 입력해주세요"
+//        binding.joinEmailTextInputLayout.setOnFocusChangeListener { v, hasFocus ->
+//            if (hasFocus) {
+//                binding.joinEmailTextInputLayout.hint = "이메일을 입력해주세요"
+//                if (!emailRegex(binding.joinEmailEditText.text.toString())) {
+//                    binding.joinEmailTextInputLayout.hint = "적절하지 않은 이메일 입니다."
+//                }
+//            } else {
+//                binding.joinEmailEditText.hint = "이메일을 입력해주세요"
+//                if (!emailRegex(binding.joinEmailEditText.text.toString())) {
+//                    binding.joinEmailTextInputLayout.hint = "적절하지 않은 이메일 입니다."
+//                }
+//            }
+//        }
+
+
         binding.joinEmailCheckBtn.setOnClickListener {
-            var email = binding.emailCheckTv.text.trim().toString()
+            var email = binding.joinEmailEditText.text.toString()
             Log.d(TAG, "onViewCreated: ")
+
             CoroutineScope(Dispatchers.Main).launch {
                 val result = retrofitUserService.getEmailIsUsed(email).awaitResponse().body()
-                if (result == "yes") {
+                if (!emailRegex(email)){
+                    showAlertDialog(
+                        loginActivity,
+                        "잘못된 이메일입니다.",
+                        ""
+                    )
+                }
+                else if (result == "yes") {
                     showAlertDialog(
                         loginActivity,
                         "이미 사용중인 아이디입니다.",
                         ""
                     )
-                } else {
+                }
+                else {
                     showAlertWithMessageDialog(
                         loginActivity,
                         "사용가능한 아이디입니다.",
-                        "이메일로 발송된 인증번호를 입력해주세요."
-                        ,"EmailSendSucceeded"
+                        "이메일로 발송된 인증번호를 입력해주세요.", "EmailSendSucceeded"
                     )
                     binding.joinEmailCheckBtn.backgroundTintList =
-                        ContextCompat.getColorStateList(loginActivity, R.color.green)
-                    binding.emailTextInputLayout.isEnabled = false
+                        ContextCompat.getColorStateList(loginActivity, R.color.dark_grey)
+                    binding.joinEmailTextInputLayout.isEnabled = false
                     binding.joinEmailCheckBtn.isClickable = false
                     CoroutineScope(Dispatchers.Main).launch {
                         var result =
-                            retrofitUserService.getMainAuth(binding.joinEmailEditText.text.toString().trim())
+                            retrofitUserService.getMainAuth(
+                                binding.joinEmailEditText.text.toString().trim()
+                            )
                                 .awaitResponse().body().toString()
                         if (result.isNotEmpty()) {
                             certificationNumber = result
@@ -100,7 +152,8 @@ class JoinFragment : Fragment() {
 
 
         binding.joinCertificationNumberBtn.setOnClickListener {
-            val inputCertificationNumber = binding.joinCertificationNumberEditText.text.toString().trim()
+            val inputCertificationNumber =
+                binding.joinCertificationNumberEditText.text.toString().trim()
             if (inputCertificationNumber.isEmpty()) {
                 Toast.makeText(loginActivity, "인증번호를 입력해주세요", Toast.LENGTH_SHORT).show()
             } else {
@@ -150,7 +203,6 @@ class JoinFragment : Fragment() {
                     }
                 }
             }
-
         }
 
         binding.joinPwTextInputLayout.editText?.addTextChangedListener(passwordListener)
@@ -345,5 +397,6 @@ class JoinFragment : Fragment() {
             }
         }
     }
+
 
 }

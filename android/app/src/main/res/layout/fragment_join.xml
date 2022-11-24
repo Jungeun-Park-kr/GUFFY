@@ -43,7 +43,7 @@
                 app:layout_constraintTop_toBottomOf="@id/title" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emailTextInputLayout"
+                android:id="@+id/join_email_text_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 endIconMode="clear_text"
                 android:layout_width="0dp"
@@ -75,8 +75,8 @@
                 android:layout_marginTop="5dp"
                 android:text="이메일 인증하기 버튼을 눌러주세요."
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@id/emailTextInputLayout"
-                app:layout_constraintTop_toBottomOf="@id/emailTextInputLayout">
+                app:layout_constraintStart_toStartOf="@id/join_email_text_input_layout"
+                app:layout_constraintTop_toBottomOf="@id/join_email_text_input_layout">
 
             </TextView>
 
@@ -93,8 +93,8 @@
                 app:iconSize="40dp"
 
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/emailTextInputLayout"
-                app:layout_constraintTop_toTopOf="@+id/emailTextInputLayout"
+                app:layout_constraintStart_toEndOf="@+id/join_email_text_input_layout"
+                app:layout_constraintTop_toTopOf="@+id/join_email_text_input_layout"
                 tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck">
 
             </com.google.android.material.button.MaterialButton>
@@ -145,7 +145,7 @@
                 app:iconPadding="0dp"
                 app:iconSize="40dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/emailTextInputLayout"
+                app:layout_constraintStart_toEndOf="@+id/join_email_text_input_layout"
                 app:layout_constraintTop_toTopOf="@+id/join_certification_number_text_input_layout"
                 tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck">
 

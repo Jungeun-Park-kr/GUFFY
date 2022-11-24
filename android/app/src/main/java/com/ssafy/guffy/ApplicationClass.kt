@@ -19,9 +19,8 @@ import java.lang.reflect.Type
 // 앱이 실행될 때 1번만 실행이 됨
 class ApplicationClass : Application() {
 
-//    val SERVER_URL = "http://guffy.ssaverytime.kr:9999"
-    val SERVER_URL = "http://192.168.80.193:9999"
-
+    //    val SERVER_URL = "http://guffy.ssaverytime.kr:9999"
+    val SERVER_URL = "http://192.168.33.120:9999"
 
     companion object {
         // 전역변수 문법을 통해 Retrofit 인스턴스를 앱 실행 시 1번만 생성하여 사용 (싱글톤 객체)
@@ -35,16 +34,9 @@ class ApplicationClass : Application() {
         lateinit var editor : SharedPreferences.Editor
     }
 
-    fun deleteSharedPreference(){
-        sharedPreferences.edit().clear()
-        editor.commit()
-    }
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate() {
         super.onCreate()
-
-
 
         sharedPreferences = getSharedPreferences("userInfo", MODE_PRIVATE)
         editor = sharedPreferences.edit()
@@ -55,10 +47,10 @@ class ApplicationClass : Application() {
             .create()
         // 앱이 처음 생성되는 순간, retrofit 인스턴스를 생성
         wRetrofit = Retrofit.Builder()
-                .baseUrl(SERVER_URL)
-                .addConverterFactory(nullOnEmptyConverterFactory)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
+            .baseUrl(SERVER_URL)
+            .addConverterFactory(nullOnEmptyConverterFactory)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
         retrofitUserService = wRetrofit.create(RetrofitUserService::class.java)
         retrofitChatroomService = wRetrofit.create(RetrofitChatroomService::class.java)
         retrofitFcmService = wRetrofit.create(RetrofitFcmService::class.java)
