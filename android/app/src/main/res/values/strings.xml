@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Guffy</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="main_hello">님 안녕하세요!</string>
     <string name="main_my_interests">내 관심사</string>
     <string name="main_tmp_username">요가하는 스크류바</string>
